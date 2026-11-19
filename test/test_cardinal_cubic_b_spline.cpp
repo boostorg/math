@@ -8,7 +8,6 @@
 #include <random>
 #include <functional>
 #include <boost/random/uniform_real_distribution.hpp>
-#include <boost/type_index.hpp>
 #include <boost/math/interpolators/cardinal_cubic_b_spline.hpp>
 #include <boost/math/interpolators/detail/cardinal_cubic_b_spline_detail.hpp>
 #include <boost/math/constants/constants.hpp>
@@ -28,7 +27,7 @@ using boost::math::constants::half;
 template<class Real>
 void test_b3_spline()
 {
-    std::cout << "Testing evaluation of spline basis functions on type " << boost::typeindex::type_id<Real>().pretty_name() << "\n";
+    std::cout << "Testing evaluation of spline basis functions on type " << boost::math::test::detail::demangle(typeid(Real).name()) << "\n";
     // Outside the support:
     Real eps = std::numeric_limits<Real>::epsilon();
     CHECK_EQUAL(boost::math::interpolators::detail::b3_spline<Real>(Real(2.5)), Real(0));
@@ -71,7 +70,7 @@ template<class Real>
 void test_interpolation_condition()
 {
     using std::sqrt;
-    std::cout << "Testing interpolation condition for cubic b splines on type " << boost::typeindex::type_id<Real>().pretty_name()  << "\n";
+    std::cout << "Testing interpolation condition for cubic b splines on type " << boost::math::test::detail::demangle(typeid(Real).name())  << "\n";
     std::random_device rd;
     std::mt19937 gen(rd());
     boost::random::uniform_real_distribution<Real> dis(1, 10);
@@ -99,7 +98,7 @@ void test_interpolation_condition()
 template<class Real>
 void test_constant_function()
 {
-    std::cout << "Testing that constants are interpolated correctly by cubic b splines on type " << boost::typeindex::type_id<Real>().pretty_name() << "\n";
+    std::cout << "Testing that constants are interpolated correctly by cubic b splines on type " << boost::math::test::detail::demangle(typeid(Real).name()) << "\n";
     std::vector<Real> v(500);
     const Real constant = Real(50.2);
     for (size_t i = 0; i < v.size(); ++i)
@@ -165,7 +164,7 @@ template<class Real>
 void test_affine_function()
 {
     using std::sqrt;
-    std::cout << "Testing that affine functions are interpolated correctly by cubic b splines on type " << boost::typeindex::type_id<Real>().pretty_name() << "\n";
+    std::cout << "Testing that affine functions are interpolated correctly by cubic b splines on type " << boost::math::test::detail::demangle(typeid(Real).name()) << "\n";
     std::vector<Real> v(500);
     Real a = 10;
     Real b = 8;
@@ -206,7 +205,7 @@ template<class Real>
 void test_quadratic_function()
 {
     using std::sqrt;
-    std::cout << "Testing that quadratic functions are interpolated correctly by cubic b splines on type " << boost::typeindex::type_id<Real>().pretty_name() << "\n";
+    std::cout << "Testing that quadratic functions are interpolated correctly by cubic b splines on type " << boost::math::test::detail::demangle(typeid(Real).name()) << "\n";
     std::vector<Real> v(500);
     Real a = static_cast<Real>(1.2);
     Real b = static_cast<Real>(-3.4);
@@ -236,7 +235,7 @@ template<class Real>
 void test_circ_conic_function()
 {
     using std::sqrt;
-    std::cout << "Testing that conic section of a circle is interpolated correctly by cubic b splines on type " << boost::typeindex::type_id<Real>().pretty_name() << '\n';
+    std::cout << "Testing that conic section of a circle is interpolated correctly by cubic b splines on type " << boost::math::test::detail::demangle(typeid(Real).name()) << '\n';
     std::vector<Real> v(500);
     Real cv = Real(0.1);
     Real w = Real(2.0);
@@ -273,7 +272,7 @@ void test_circ_conic_function()
 template<class Real>
 void test_trig_function()
 {
-    std::cout << "Testing that sine functions are interpolated correctly by cubic b splines on type " << boost::typeindex::type_id<Real>().pretty_name() << "\n";
+    std::cout << "Testing that sine functions are interpolated correctly by cubic b splines on type " << boost::math::test::detail::demangle(typeid(Real).name()) << "\n";
     std::mt19937 gen;
     std::vector<Real> v(500);
     Real x0 = 1;

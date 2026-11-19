@@ -7,7 +7,6 @@
 
 #include <random>
 #include <iostream>
-#include <boost/type_index.hpp>
 #include <boost/math/special_functions/chebyshev.hpp>
 #include <boost/math/special_functions/sinc.hpp>
 #include <boost/multiprecision/cpp_bin_float.hpp>
@@ -22,7 +21,7 @@ using boost::math::chebyshev_u;
 template<class Real>
 void test_polynomials()
 {
-    std::cout << "Testing explicit polynomial representations of the Chebyshev polynomials on type " << boost::typeindex::type_id<Real>().pretty_name()  << "\n";
+    std::cout << "Testing explicit polynomial representations of the Chebyshev polynomials on type " << boost::math::test::detail::demangle(typeid(Real).name())  << "\n";
 
     Real x = -2;
     Real tol = 32*std::numeric_limits<Real>::epsilon();
@@ -52,7 +51,7 @@ void test_polynomials()
 template<class Real>
 void test_derivatives()
 {
-    std::cout << "Testing explicit polynomial representations of the Chebyshev polynomial derivatives on type " << boost::typeindex::type_id<Real>().pretty_name()  << "\n";
+    std::cout << "Testing explicit polynomial representations of the Chebyshev polynomial derivatives on type " << boost::math::test::detail::demangle(typeid(Real).name())  << "\n";
 
     Real x = -2;
     Real tol = 4*std::numeric_limits<Real>::epsilon();

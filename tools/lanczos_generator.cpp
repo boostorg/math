@@ -7,9 +7,7 @@
 #include <boost/math/constants/constants.hpp>
 #include <boost/math/tools/precision.hpp>
 #include <boost/math/tools/polynomial.hpp>
-#include <boost/numeric/ublas/matrix.hpp>
-#include <boost/numeric/ublas/io.hpp>
-#include <boost/numeric/ublas/operation.hpp>
+#include <boost/math/tools/solve.hpp>
 #include <cstdint>
 #include <boost/math/special_functions/log1p.hpp>
 #include <boost/math/special_functions/relative_difference.hpp>
@@ -38,8 +36,7 @@
 #include <iomanip>
 #include <vector>
 
-using boost::numeric::ublas::matrix;
-using boost::numeric::ublas::vector;
+using boost::math::tools::matrix;
 
 struct lanczos_spot_data
 {

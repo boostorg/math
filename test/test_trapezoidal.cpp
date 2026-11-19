@@ -6,7 +6,6 @@
  */
 #include <complex>
 #include <boost/config.hpp>
-#include <boost/type_index.hpp>
  //#include <boost/multiprecision/mpc.hpp>
 #include <boost/math/tools/test_value.hpp>
 #include <boost/math/concepts/real_concept.hpp>
@@ -33,7 +32,7 @@ using boost::math::quadrature::trapezoidal;
 template<class Complex>
 void test_complex_bessel()
 {
-    std::cout << "Testing that complex-valued integrands are integrated correctly by the adaptive trapezoidal routine on type " << boost::typeindex::type_id<Complex>().pretty_name()  << "\n";
+    std::cout << "Testing that complex-valued integrands are integrated correctly by the adaptive trapezoidal routine on type " << boost::math::test::detail::demangle(typeid(Complex).name())  << "\n";
     typedef typename Complex::value_type Real;
     Complex z{2, 3};
     int n = 2;
@@ -65,7 +64,7 @@ void test_complex_bessel()
 template<class Complex>
 void test_I0_complex()
 {
-    std::cout << "Testing that complex-argument I0 is calculated correctly by the adaptive trapezoidal routine on type " << boost::typeindex::type_id<Complex>().pretty_name()  << "\n";
+    std::cout << "Testing that complex-argument I0 is calculated correctly by the adaptive trapezoidal routine on type " << boost::math::test::detail::demangle(typeid(Complex).name())  << "\n";
     typedef typename Complex::value_type Real;
     Complex z{2, 3};
     using boost::math::constants::pi;
@@ -94,7 +93,7 @@ void test_I0_complex()
 template<class Complex>
 void test_erfc()
 {
-    std::cout << "Testing that complex-argument erfc is calculated correctly by the adaptive trapezoidal routine on type " << boost::typeindex::type_id<Complex>().pretty_name()  << "\n";
+    std::cout << "Testing that complex-argument erfc is calculated correctly by the adaptive trapezoidal routine on type " << boost::math::test::detail::demangle(typeid(Complex).name())  << "\n";
     typedef typename Complex::value_type Real;
     Complex z{2, -1};
     using boost::math::constants::pi;
@@ -126,7 +125,7 @@ void test_erfc()
 template<class Real>
 void test_constant()
 {
-    std::cout << "Testing constants are integrated correctly by the adaptive trapezoidal routine on type " << boost::typeindex::type_id<Real>().pretty_name()  << "\n";
+    std::cout << "Testing constants are integrated correctly by the adaptive trapezoidal routine on type " << boost::math::test::detail::demangle(typeid(Real).name())  << "\n";
 
     auto f = [](Real)->Real { return boost::math::constants::half<Real>(); };
     Real Q = trapezoidal<decltype(f), Real>(f, static_cast<Real>(0.0), static_cast<Real>(10.0));
@@ -144,7 +143,7 @@ void test_rational_periodic()
 {
     using boost::math::constants::two_pi;
     using boost::math::constants::third;
-    std::cout << "Testing that rational periodic functions are integrated correctly by trapezoidal rule on type " << boost::typeindex::type_id<Real>().pretty_name() << "\n";
+    std::cout << "Testing that rational periodic functions are integrated correctly by trapezoidal rule on type " << boost::math::test::detail::demangle(typeid(Real).name()) << "\n";
 
     auto f = [](Real x)->Real { using std::cos; return 1 / (5 - 4 * cos(x)); };
 
@@ -157,7 +156,7 @@ void test_rational_periodic()
 template<class Real>
 void test_bump_function()
 {
-    std::cout << "Testing that bump functions are integrated correctly by trapezoidal rule on type " << boost::typeindex::type_id<Real>().pretty_name() << "\n";
+    std::cout << "Testing that bump functions are integrated correctly by trapezoidal rule on type " << boost::math::test::detail::demangle(typeid(Real).name()) << "\n";
     auto f = [](Real x)->Real {
         if( x>= 1 || x <= -1)
         {
@@ -176,7 +175,7 @@ void test_bump_function()
 template<class Real>
 void test_zero_function()
 {
-    std::cout << "Testing that zero functions are integrated correctly by trapezoidal rule on type " << boost::typeindex::type_id<Real>().pretty_name() << "\n";
+    std::cout << "Testing that zero functions are integrated correctly by trapezoidal rule on type " << boost::math::test::detail::demangle(typeid(Real).name()) << "\n";
     auto f = [](Real)->Real { return (Real) 0;};
     Real tol = 100* boost::math::tools::epsilon<Real>();
     Real Q = trapezoidal(f, (Real) -1, (Real) 1, tol);
@@ -186,7 +185,7 @@ void test_zero_function()
 template<class Real>
 void test_sinsq()
 {
-    std::cout << "Testing that sin(x)^2 is integrated correctly by the trapezoidal rule on type " << boost::typeindex::type_id<Real>().pretty_name() << "\n";
+    std::cout << "Testing that sin(x)^2 is integrated correctly by the trapezoidal rule on type " << boost::math::test::detail::demangle(typeid(Real).name()) << "\n";
     auto f = [](Real x)->Real { using std::sin; return sin(10 * x) * sin(10 * x); };
     Real tol = 100* boost::math::tools::epsilon<Real>();
     Real Q = trapezoidal(f, (Real) 0, (Real) boost::math::constants::pi<Real>(), tol);
@@ -199,7 +198,7 @@ void test_slowly_converging()
 {
     using std::sqrt;
     using std::abs;
-    std::cout << "Testing that non-periodic functions are correctly integrated by the trapezoidal rule, even if slowly, on type " << boost::typeindex::type_id<Real>().pretty_name() << "\n";
+    std::cout << "Testing that non-periodic functions are correctly integrated by the trapezoidal rule, even if slowly, on type " << boost::math::test::detail::demangle(typeid(Real).name()) << "\n";
     // This function is not periodic, so it should not be fast to converge:
     auto f = [](Real x)->Real { using std::sqrt;  return sqrt(1 - x*x); };
 
@@ -219,7 +218,7 @@ void test_rational_sin()
     using std::sin;
     using boost::math::constants::two_pi;
     using boost::math::constants::half;
-    std::cout << "Testing that a rational sin function is integrated correctly by the trapezoidal rule on type " << boost::typeindex::type_id<Real>().pretty_name() << "\n";
+    std::cout << "Testing that a rational sin function is integrated correctly by the trapezoidal rule on type " << boost::math::test::detail::demangle(typeid(Real).name()) << "\n";
     Real a = 5;
     auto f = [=](Real x)->Real { using std::sin;  Real t = a + sin(x); return 1.0f / (t*t); };
 

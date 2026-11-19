@@ -5,7 +5,6 @@
 // or copy at http://www.boost.org/LICENSE_1_0.txt)
 #include <cmath>
 #include <iostream>
-#include <boost/type_index.hpp>
 #include <boost/math/quadrature/ooura_fourier_integrals.hpp>
 #include <boost/multiprecision/cpp_bin_float.hpp>
 #include "math_unit_test.hpp"
@@ -59,7 +58,7 @@ template<class Real>
 void test_ooura_eta()
 {
     using boost::math::quadrature::detail::ooura_eta;
-    std::cout << "Testing eta function on type " << boost::typeindex::type_id<Real>().pretty_name()  << "\n";
+    std::cout << "Testing eta function on type " << boost::math::test::detail::demangle(typeid(Real).name())  << "\n";
     {
         Real x = 0;
         Real alpha = 7;
@@ -85,7 +84,7 @@ void test_ooura_sin_nodes_and_weights()
     using boost::math::quadrature::detail::ooura_sin_node_and_weight;
     using boost::math::quadrature::detail::ooura_eta;
     using std::exp;
-    std::cout << "Testing nodes and weights on type " << boost::typeindex::type_id<Real>().pretty_name()  << "\n";
+    std::cout << "Testing nodes and weights on type " << boost::math::test::detail::demangle(typeid(Real).name())  << "\n";
     {
         long n = 1;
         Real alpha = 1;
@@ -98,7 +97,7 @@ void test_ooura_sin_nodes_and_weights()
 
 template<class Real>
 void test_ooura_alpha() {
-    std::cout << "Testing Ooura alpha on type " << boost::typeindex::type_id<Real>().pretty_name()  << "\n";
+    std::cout << "Testing Ooura alpha on type " << boost::math::test::detail::demangle(typeid(Real).name())  << "\n";
     using std::sqrt;
     using std::log1p;
     using boost::math::quadrature::detail::calculate_ooura_alpha;
@@ -144,7 +143,7 @@ void test_node_weight_precision_agreement()
 template<class Real>
 void test_sinc()
 {
-    std::cout << "Testing sinc integral on type " << boost::typeindex::type_id<Real>().pretty_name()  << "\n";
+    std::cout << "Testing sinc integral on type " << boost::math::test::detail::demangle(typeid(Real).name())  << "\n";
     using std::numeric_limits;
     auto integrator = get_sin_integrator<Real>();
     auto f = [](Real x)->Real { return 1/x; };
@@ -164,7 +163,7 @@ void test_sinc()
 template<class Real>
 void test_exp()
 {
-    std::cout << "Testing exponential integral on type " << boost::typeindex::type_id<Real>().pretty_name()  << "\n";
+    std::cout << "Testing exponential integral on type " << boost::math::test::detail::demangle(typeid(Real).name())  << "\n";
     using std::exp;
     using std::numeric_limits;
     auto integrator = get_sin_integrator<Real>();
@@ -183,7 +182,7 @@ void test_exp()
 template<class Real>
 void test_root()
 {
-    std::cout << "Testing integral of sin(kx)/sqrt(x) on type " << boost::typeindex::type_id<Real>().pretty_name()  << "\n";
+    std::cout << "Testing integral of sin(kx)/sqrt(x) on type " << boost::math::test::detail::demangle(typeid(Real).name())  << "\n";
     using std::sqrt;
     using std::numeric_limits;
     auto integrator = get_sin_integrator<Real>();
@@ -211,7 +210,7 @@ Real asymptotic(Real lambda) {
 template<class Real>
 void test_double_osc()
 {
-    std::cout << "Testing double oscillation on type " << boost::typeindex::type_id<Real>().pretty_name()  << "\n";
+    std::cout << "Testing double oscillation on type " << boost::math::test::detail::demangle(typeid(Real).name())  << "\n";
     using std::sqrt;
     using std::numeric_limits;
     auto integrator = get_sin_integrator<Real>();
@@ -227,7 +226,7 @@ template<class Real>
 void test_zero_integrand()
 {
     // Make sure relative error tolerance doesn't break on zero integrand:
-    std::cout << "Testing zero integrand on type " << boost::typeindex::type_id<Real>().pretty_name()  << "\n";
+    std::cout << "Testing zero integrand on type " << boost::math::test::detail::demangle(typeid(Real).name())  << "\n";
     using std::sqrt;
     using std::numeric_limits;
     auto integrator = get_sin_integrator<Real>();
@@ -243,7 +242,7 @@ void test_zero_integrand()
 // template<class Real>
 // void test_log()
 // {
-//     std::cout << "Testing integral of log(x)sin(x) on type " << boost::typeindex::type_id<Real>().pretty_name()  << "\n";
+//     std::cout << "Testing integral of log(x)sin(x) on type " << boost::math::test::detail::demangle(typeid(Real).name())  << "\n";
 //     using std::log;
 //     using std::exp;
 //     using std::numeric_limits;
@@ -259,7 +258,7 @@ void test_zero_integrand()
 template<class Real>
 void test_cos_integral1()
 {
-    std::cout << "Testing integral of cos(x)/(x*x+1) on type " << boost::typeindex::type_id<Real>().pretty_name()  << "\n";
+    std::cout << "Testing integral of cos(x)/(x*x+1) on type " << boost::math::test::detail::demangle(typeid(Real).name())  << "\n";
     using std::exp;
     using boost::math::constants::half_pi;
     using boost::math::constants::e;
@@ -276,7 +275,7 @@ void test_cos_integral1()
 template<class Real>
 void test_cos_integral2()
 {
-    std::cout << "Testing integral of exp(-a*x) on type " << boost::typeindex::type_id<Real>().pretty_name()  << "\n";
+    std::cout << "Testing integral of exp(-a*x) on type " << boost::math::test::detail::demangle(typeid(Real).name())  << "\n";
     using std::exp;
     using boost::math::constants::half_pi;
     using boost::math::constants::e;
@@ -296,7 +295,7 @@ void test_cos_integral2()
 template<class Real>
 void test_nodes()
 {
-    std::cout << "Testing nodes and weights on type " << boost::typeindex::type_id<Real>().pretty_name()  << "\n";
+    std::cout << "Testing nodes and weights on type " << boost::math::test::detail::demangle(typeid(Real).name())  << "\n";
     auto sin_integrator = get_sin_integrator<Real>();
 
     auto const & big_nodes = sin_integrator.big_nodes();

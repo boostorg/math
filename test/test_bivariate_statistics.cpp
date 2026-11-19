@@ -16,7 +16,7 @@
 #include <tuple>
 #include <cmath>
 #include "math_unit_test.hpp"
-#include <boost/numeric/ublas/vector.hpp>
+#include <deque>
 #include <boost/math/constants/constants.hpp>
 #include <boost/math/statistics/bivariate_statistics.hpp>
 #include <boost/multiprecision/cpp_bin_float.hpp>
@@ -30,7 +30,7 @@ using boost::multiprecision::cpp_complex_50;
  * Test checklist:
  * 1) Does it work with multiprecision?
  * 2) Does it work with .cbegin()/.cend() if the data is not altered?
- * 3) Does it work with ublas and std::array? (Checking Eigen and Armadillo will make the CI system really unhappy.)
+ * 3) Does it work with std::deque and std::array? (Checking Eigen and Armadillo will make the CI system really unhappy.)
  * 4) Does it work with std::forward_list if a forward iterator is all that is required?
  * 5) Does it work with complex data if complex data is sensible?
  */

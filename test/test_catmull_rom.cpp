@@ -7,12 +7,11 @@
 #include <array>
 #include <random>
 #include <boost/cstdfloat.hpp>
-#include <boost/type_index.hpp>
 #include <boost/math/constants/constants.hpp>
 #include <boost/math/interpolators/catmull_rom.hpp>
 #include <boost/multiprecision/cpp_bin_float.hpp>
 #include <boost/multiprecision/cpp_dec_float.hpp>
-#include <boost/numeric/ublas/vector.hpp>
+#include <deque>
 #include "math_unit_test.hpp"
 
 #if __has_include(<stdfloat>)
@@ -54,7 +53,7 @@ template<class Real>
 void test_linear()
 {
     std::cout << "Testing that the Catmull-Rom spline interpolates linear functions correctly on type "
-              << boost::typeindex::type_id<Real>().pretty_name() << "\n";
+              << boost::math::test::detail::demangle(typeid(Real).name()) << "\n";
 
     Real tol = 10*std::numeric_limits<Real>::epsilon();
     std::vector<std::array<Real, 3>> v(4);
@@ -122,7 +121,7 @@ void test_circle()
     using std::sin;
 
     std::cout << "Testing that the Catmull-Rom spline interpolates circles correctly on type "
-              << boost::typeindex::type_id<Real>().pretty_name() << "\n";
+              << boost::math::test::detail::demangle(typeid(Real).name()) << "\n";
 
     Real tol = 10*std::numeric_limits<Real>::epsilon();
     std::vector<std::array<Real, 2>> v(20*sizeof(Real));
@@ -173,7 +172,7 @@ void test_affine_invariance()
 {
     std::cout << "Testing that the Catmull-Rom spline is affine invariant in dimension "
               << dimension << " on type "
-              << boost::typeindex::type_id<Real>().pretty_name() << "\n";
+              << boost::math::test::detail::demangle(typeid(Real).name()) << "\n";
 
     Real tol = 1000*std::numeric_limits<Real>::epsilon();
     std::vector<std::array<Real, dimension>> v(100);
@@ -237,7 +236,7 @@ void test_helix()
 {
     using boost::math::constants::pi;
     std::cout << "Testing that the Catmull-Rom spline interpolates helices correctly on type "
-              << boost::typeindex::type_id<Real>().pretty_name() << "\n";
+              << boost::math::test::detail::demangle(typeid(Real).name()) << "\n";
 
     Real tol = 0.001;
     std::vector<std::array<Real, 3>> v(400*sizeof(Real));
@@ -381,7 +380,7 @@ void test_random_access_container()
     mypoint3d<Real> p4(0.5, 0.6, 0.7);
     mypoint3d<Real> p5(0.6, 0.7, 0.8);
 
-    boost::numeric::ublas::vector<mypoint3d<Real>> u(6);
+    std::deque<mypoint3d<Real>> u(6);
     u[0] = p0;
     u[1] = p1;
     u[2] = p2;

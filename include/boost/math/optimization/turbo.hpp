@@ -417,7 +417,7 @@ private:
       double best_value = std::numeric_limits<double>::infinity();
       for (size_t c = 0; c < M; ++c) {
         // Without a factor (it should not happen, as the noise bounds the covariance below), the marginals:
-        double const f = factored ? mu[c] + dot(S_.data() + c * M, z.data(), c + 1)
+        double const f = factored ? mu[c] + tools::detail::dot(S_.data() + c * M, z.data(), c + 1)
                                   : mu[c] + sqrt(gp_.outputscale() + gp_.noise()) * z[c];
         if (!taken[c] && (best == M || f < best_value)) {
           best = c;

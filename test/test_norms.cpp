@@ -12,7 +12,8 @@
 #include <random>
 #include <limits>
 #include <boost/core/lightweight_test.hpp>
-#include <boost/numeric/ublas/vector.hpp>
+#include <deque>
+#include <boost/type_traits/is_complex.hpp>
 #include <boost/math/constants/constants.hpp>
 #include <boost/math/tools/norms.hpp>
 #include <boost/multiprecision/cpp_bin_float.hpp>
@@ -37,7 +38,7 @@ using boost::math::tools::total_variation;
  * Test checklist:
  * 1) Does it work with multiprecision?
  * 2) Does it work with .cbegin()/.cend() if the data is not altered?
- * 3) Does it work with ublas and std::array? (Checking Eigen and Armadillo will make the CI system really unhappy.)
+ * 3) Does it work with std::deque and std::array? (Checking Eigen and Armadillo will make the CI system really unhappy.)
  * 4) Does it work with std::forward_list if a forward iterator is all that is required?
  * 5) Does it work with complex data if complex data is sensible?
  */
@@ -133,9 +134,9 @@ void test_lp()
     Real expected = 7*pow(v.size(), static_cast<Real>(1)/static_cast<Real>(8));
     BOOST_TEST(abs(l8 - expected) < tol*abs(expected));
 
-    // Does it work with ublas vectors?
+    // Does it work with std::deque?
     // Does it handle the overflow of intermediates?
-    boost::numeric::ublas::vector<Real> w(4);
+    std::deque<Real> w(4);
     Real bignum = sqrt((std::numeric_limits<Real>::max)())/256;
     for (size_t i = 0; i < w.size(); ++i)
     {

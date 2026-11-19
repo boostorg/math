@@ -17,7 +17,7 @@ def main(ctx):
 
   things_to_test = [ "special_fun", "distribution_tests", "mp", "misc", "interpolators", "quadrature", "autodiff", "long-running-tests", "float128_tests", "concepts" ]
   gcc13_things_to_test = [ "special_fun", "distribution_tests", "mp", "misc", "interpolators", "quadrature", "autodiff", "long-running-tests", "float128_tests", "concepts", "new_floats" ]
-  sanitizer_test = [ "special_fun", "distribution_tests", "misc", "interpolators", "quadrature", "float128_tests" ]
+  sanitizer_test = [ "special_fun", "distribution_tests", "misc", "interpolators", "quadrature", "float128_tests", "test_reverse_mode_autodiff", "gradient_based_optimizers" ]
   reverse_mode_autodiff_test = [ "test_reverse_mode_autodiff", "autodiff-long-running-tests", "gradient_based_optimizers" ]
   cxx17_stds = [ "c++17" ]
   gnu_cxx17_stds = [ "gnu++17" ]

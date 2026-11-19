@@ -6,7 +6,7 @@
  */
 #include <random>
 #include <array>
-#include <boost/numeric/ublas/vector.hpp>
+#include <deque>
 #include <boost/math/constants/constants.hpp>
 #include <boost/math/differentiation/lanczos_smoothing.hpp>
 #include <boost/multiprecision/cpp_bin_float.hpp>
@@ -634,8 +634,8 @@ void test_data_representations()
         CHECK_ULP_CLOSE(9, dvdt[i], 300);
     }
 
-    boost::numeric::ublas::vector<Real> w(500);
-    boost::numeric::ublas::vector<Real> dwdt(500);
+    std::deque<Real> w(500);
+    std::deque<Real> dwdt(500);
     for(size_t i = 0; i < w.size(); ++i)
     {
         w[i] = 9*i + 6;

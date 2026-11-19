@@ -23,7 +23,7 @@
 #include <boost/test/results_collector.hpp>
 #include <boost/test/unit_test.hpp>
 #include <array>
-#include <boost/type_index.hpp>
+#include <boost/core/demangle.hpp>
 #include "table_type.hpp"
 #include <iostream>
 #include <iomanip>
@@ -448,7 +448,7 @@ template <class ComplexType>
 void test_complex_newton()
 {
     typedef typename ComplexType::value_type Real;
-    std::cout << "Testing complex Newton's Method on type " << boost::typeindex::type_id<Real>().pretty_name() << "\n";
+    std::cout << "Testing complex Newton's Method on type " << boost::core::demangle(typeid(Real).name()) << "\n";
     using std::abs;
     using std::sqrt;
     using boost::math::tools::complex_newton;

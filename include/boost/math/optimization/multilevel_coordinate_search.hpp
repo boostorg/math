@@ -13,6 +13,7 @@
 #endif
 #include <boost/math/optimization/detail/common.hpp>
 #include <boost/math/tools/assert.hpp>
+#include <boost/math/tools/detail/linear_algebra/cholesky.hpp>
 #ifndef BOOST_MATH_BUILD_MODULE
 #include <algorithm>
 #include <cmath>
@@ -148,7 +149,7 @@ std::vector<Real> minimize_quadratic_on_box(std::vector<Real> const &g, std::vec
         move(i, t);
       }
     }
-    // Newton step on the free variables, by a hand-rolled Cholesky factorization:
+    // Newton step on the free variables, by a Cholesky factorization:
     free_set.clear();
     for (size_t i = 0; i < n; ++i) {
       if (lo[i] < h[i] && h[i] < hi[i]) {
@@ -156,81 +157,63 @@ std::vector<Real> minimize_quadratic_on_box(std::vector<Real> const &g, std::vec
       }
     }
     size_t const m = free_set.size();
-    bool positive_definite = m > 0;
-    L.assign(m * m, Real(0));
-    for (size_t j = 0; j < m && positive_definite; ++j) {
-      Real d = G[free_set[j] * n + free_set[j]];
-      for (size_t k = 0; k < j; ++k) {
-        d -= L[j * m + k] * L[j * m + k];
+    L.resize(m * m);
+    for (size_t i = 0; i < m; ++i) {
+      for (size_t k = 0; k <= i; ++k) {
+        L[i * m + k] = G[free_set[i] * n + free_set[k]];
       }
-      if (!(d > 0)) {
-        positive_definite = false;
-        // w = (-G_11^{-1} G_1j, 1, 0, ...) has curvature w^T G w = d <= 0, where G_11 = L_11 L_11^T is the leading
-        // block already factored. Go downhill along it as far as the box allows.
-        p.assign(m, Real(0));
-        p[j] = 1;
-        for (size_t k = j; k-- > 0;) {
-          Real s = L[j * m + k];
-          for (size_t q = k + 1; q < j; ++q) {
-            s += L[q * m + k] * p[q];
-          }
-          p[k] = -s / L[k * m + k];
+    }
+    size_t failed = 0;
+    bool const positive_definite = m > 0 && tools::detail::cholesky(L.data(), m, 0, &failed);
+    if (m > 0 && !positive_definite) {
+      size_t const j = failed;
+      Real const d = L[j * m + j];
+      // w = (-G_11^{-1} G_1j, 1, 0, ...) has curvature w^T G w = d <= 0, where G_11 = L_11 L_11^T is the leading
+      // block already factored. Go downhill along it as far as the box allows.
+      p.assign(m, Real(0));
+      p[j] = 1;
+      for (size_t k = j; k-- > 0;) {
+        Real s = L[j * m + k];
+        for (size_t q = k + 1; q < j; ++q) {
+          s += L[q * m + k] * p[q];
         }
-        Real slope = 0;
+        p[k] = -s / L[k * m + k];
+      }
+      Real slope = 0;
+      for (size_t i = 0; i <= j; ++i) {
+        slope += r[free_set[i]] * p[i];
+      }
+      if (slope > 0) {
+        for (auto &pi : p) {
+          pi = -pi;
+        }
+      }
+      if (d < 0 || slope != 0) {
+        Real t = std::numeric_limits<Real>::infinity();
         for (size_t i = 0; i <= j; ++i) {
-          slope += r[free_set[i]] * p[i];
-        }
-        if (slope > 0) {
-          for (auto &pi : p) {
-            pi = -pi;
+          size_t const k = free_set[i];
+          if (p[i] > 0) {
+            t = (std::min)(t, (hi[k] - h[k]) / p[i]);
+          }
+          else if (p[i] < 0) {
+            t = (std::min)(t, (lo[k] - h[k]) / p[i]);
           }
         }
-        if (d < 0 || slope != 0) {
-          Real t = std::numeric_limits<Real>::infinity();
+        if (t > 0 && t < std::numeric_limits<Real>::infinity()) {
           for (size_t i = 0; i <= j; ++i) {
             size_t const k = free_set[i];
-            if (p[i] > 0) {
-              t = (std::min)(t, (hi[k] - h[k]) / p[i]);
-            }
-            else if (p[i] < 0) {
-              t = (std::min)(t, (lo[k] - h[k]) / p[i]);
-            }
-          }
-          if (t > 0 && t < std::numeric_limits<Real>::infinity()) {
-            for (size_t i = 0; i <= j; ++i) {
-              size_t const k = free_set[i];
-              move(k, t * p[i]);
-            }
+            move(k, t * p[i]);
           }
         }
-        break;
-      }
-      L[j * m + j] = sqrt(d);
-      for (size_t i = j + 1; i < m; ++i) {
-        Real s = G[free_set[i] * n + free_set[j]];
-        for (size_t k = 0; k < j; ++k) {
-          s -= L[i * m + k] * L[j * m + k];
-        }
-        L[i * m + j] = s / L[j * m + j];
       }
     }
     if (positive_definite) {
       // Solve L L^T p = -r_F:
-      p.assign(m, Real(0));
+      p.resize(m);
       for (size_t i = 0; i < m; ++i) {
-        Real s = -r[free_set[i]];
-        for (size_t k = 0; k < i; ++k) {
-          s -= L[i * m + k] * p[k];
-        }
-        p[i] = s / L[i * m + i];
+        p[i] = -r[free_set[i]];
       }
-      for (size_t i = m; i-- > 0;) {
-        Real s = p[i];
-        for (size_t k = i + 1; k < m; ++k) {
-          s -= L[k * m + i] * p[k];
-        }
-        p[i] = s / L[i * m + i];
-      }
+      tools::detail::cholesky_solve(L.data(), m, p.data());
       // The largest step t <= 1 along p that stays in the box:
       Real t = 1;
       for (size_t i = 0; i < m; ++i) {

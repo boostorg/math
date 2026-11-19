@@ -16,7 +16,7 @@
 #include <span>
 #endif
 #include <boost/core/lightweight_test.hpp>
-#include <boost/numeric/ublas/vector.hpp>
+#include <deque>
 #include <boost/math/constants/constants.hpp>
 #include <boost/math/statistics/univariate_statistics.hpp>
 #include <boost/math/statistics/signal_statistics.hpp>
@@ -32,7 +32,7 @@ using boost::math::constants::two_pi;
  * Test checklist:
  * 1) Does it work with multiprecision?
  * 2) Does it work with .cbegin()/.cend() if the data is not altered?
- * 3) Does it work with ublas and std::array? (Checking Eigen and Armadillo will make the CI system really unhappy.)
+ * 3) Does it work with std::deque and std::array? (Checking Eigen and Armadillo will make the CI system really unhappy.)
  * 4) Does it work with std::forward_list if a forward iterator is all that is required?
  * 5) Does it work with complex data if complex data is sensible?
  * 6) Does it work with integer data if sensible?
@@ -83,8 +83,8 @@ void test_hoyer_sparsity()
     hs = boost::math::statistics::hoyer_sparsity(u1);
     BOOST_TEST(abs(hs) < tol);
 
-    // Does it work with a boost ublas vector?
-    boost::numeric::ublas::vector<Real> u2(3);
+    // Does it work with a std::deque?
+    std::deque<Real> u2(3);
     u2[0] = 1;
     u2[1] = 1;
     u2[2] = 1;

@@ -18,7 +18,6 @@
 #include <boost/math/special_functions/next.hpp>
 #include <boost/math/special_functions/gamma.hpp>
 #include <boost/math/special_functions/sinc.hpp>
-#include <boost/type_index.hpp>
 #include "math_unit_test.hpp"
 
 #ifdef BOOST_HAS_FLOAT128
@@ -179,7 +178,7 @@ Real get_convergence_tolerance()
 template<class Real>
 void test_right_limit_infinite()
 {
-    std::cout << "Testing right limit infinite for tanh_sinh in 'A Comparison of Three High Precision Quadrature Schemes' on type " << boost::typeindex::type_id<Real>().pretty_name() << "\n";
+    std::cout << "Testing right limit infinite for tanh_sinh in 'A Comparison of Three High Precision Quadrature Schemes' on type " << boost::math::test::detail::demangle(typeid(Real).name()) << "\n";
     Real Q;
     Real Q_expected;
     Real error;
@@ -235,7 +234,7 @@ void test_right_limit_infinite()
 template<class Real>
 void test_left_limit_infinite()
 {
-    std::cout << "Testing left limit infinite for 1/(1+t^2) on type " << boost::typeindex::type_id<Real>().pretty_name() << "\n";
+    std::cout << "Testing left limit infinite for 1/(1+t^2) on type " << boost::math::test::detail::demangle(typeid(Real).name()) << "\n";
     Real Q;
     Real Q_expected;
     Real error;
@@ -273,7 +272,7 @@ void test_nr_examples()
     using std::pow;
     using std::exp;
     using std::sqrt;
-    std::cout << "Testing type " << boost::typeindex::type_id<Real>().pretty_name() << "\n";
+    std::cout << "Testing type " << boost::math::test::detail::demangle(typeid(Real).name()) << "\n";
     std::cout << std::setprecision(std::numeric_limits<Real>::digits10);
     Real Q;
     Real Q_expected;
@@ -360,7 +359,7 @@ void test_crc()
     using std::sqrt;
     using std::log;
     using std::cos;
-    std::cout << "Testing integral from CRC handbook on type " << boost::typeindex::type_id<Real>().pretty_name() << "\n";
+    std::cout << "Testing integral from CRC handbook on type " << boost::math::test::detail::demangle(typeid(Real).name()) << "\n";
     std::cout << std::setprecision(std::numeric_limits<Real>::digits10);
     Real Q;
     Real Q_expected;
@@ -492,7 +491,7 @@ void test_crc()
 template<class Complex>
 void test_complex_modified_bessel()
 {
-    std::cout << "Testing complex modified Bessel function on type " << boost::typeindex::type_id<Complex>().pretty_name() << "\n";
+    std::cout << "Testing complex modified Bessel function on type " << boost::math::test::detail::demangle(typeid(Complex).name()) << "\n";
     typedef typename Complex::value_type Real;
     Real error;
     Real L1;
@@ -531,7 +530,7 @@ void test_complex_modified_bessel()
 
 template<typename Complex>
 void test_complex_exponential_integral_E1(){
-    std::cout << "Testing complex exponential integral on type " << boost::typeindex::type_id<Complex>().pretty_name() << "\n";
+    std::cout << "Testing complex exponential integral on type " << boost::math::test::detail::demangle(typeid(Complex).name()) << "\n";
     typedef typename Complex::value_type Real;
     Real error;
     Real L1;
@@ -596,7 +595,7 @@ void test_non_central_t()
 template <class Real>
 void test_compensated()
 {
-   std::cout << "Testing compensated summation on type " << boost::typeindex::type_id<Real>().pretty_name() << "\n";
+   std::cout << "Testing compensated summation on type " << boost::math::test::detail::demangle(typeid(Real).name()) << "\n";
    // Uncompensated, these are up to 4 and 5 ulps off:
    exp_sinh<Real> integrator(9, true);
    Real tol = 4 * std::numeric_limits<Real>::epsilon();

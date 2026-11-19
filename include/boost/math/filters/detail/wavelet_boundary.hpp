@@ -11,6 +11,8 @@
 #endif
 
 #include <boost/math/tools/config.hpp>
+#include <boost/math/tools/detail/linear_algebra/gauss_jordan.hpp>
+#include <boost/math/tools/detail/linear_algebra/qr.hpp>
 
 #ifndef BOOST_MATH_BUILD_MODULE
 #include <algorithm>
@@ -104,90 +106,42 @@ matrix<Real> transpose(const matrix<Real>& a)
    return t;
 }
 
+// Row-major copies of a matrix, for tools::detail.
+template <class Real>
+std::vector<Real> flatten(const matrix<Real>& a)
+{
+   std::vector<Real> f;
+   for (const std::vector<Real>& row : a) f.insert(f.end(), row.begin(), row.end());
+   return f;
+}
+
+template <class Real>
+matrix<Real> unflatten(const std::vector<Real>& f, std::size_t r, std::size_t c)
+{
+   matrix<Real> a(r);
+   for (std::size_t i = 0; i < r; ++i) a[i].assign(f.begin() + std::ptrdiff_t(i * c), f.begin() + std::ptrdiff_t((i + 1) * c));
+   return a;
+}
+
 // Gauss-Jordan with partial pivoting; false if a is singular.
 template <class Real>
-bool inverse(matrix<Real> a, matrix<Real>& x)
+bool inverse(const matrix<Real>& a, matrix<Real>& x)
 {
-   using std::abs;
    const std::size_t n = a.size();
-   x = zeros<Real>(n, n);
-   for (std::size_t i = 0; i < n; ++i) x[i][i] = 1;
-   for (std::size_t c = 0; c < n; ++c)
-   {
-      std::size_t piv = c;
-      for (std::size_t r = c + 1; r < n; ++r)
-         if (abs(a[r][c]) > abs(a[piv][c])) piv = r;
-      if (a[piv][c] == 0) return false;
-      std::swap(a[c], a[piv]);
-      std::swap(x[c], x[piv]);
-      const Real d = a[c][c];
-      for (std::size_t j = 0; j < n; ++j) { a[c][j] /= d; x[c][j] /= d; }
-      for (std::size_t r = 0; r < n; ++r)
-      {
-         if (r == c || a[r][c] == 0) continue;
-         const Real f = a[r][c];
-         for (std::size_t j = 0; j < n; ++j) { a[r][j] -= f * a[c][j]; x[r][j] -= f * x[c][j]; }
-      }
-   }
+   std::vector<Real> f = flatten(a), fi(n * n);
+   if (!tools::detail::gauss_jordan_inverse(f.data(), fi.data(), n)) return false;
+   x = unflatten(fi, n, n);
    return true;
 }
 
 // The first r columns of Q from the Householder QR of A (m x n), optionally with column pivoting.
 template <class Real>
-matrix<Real> householder_q(matrix<Real> A, std::size_t r, bool pivot)
+matrix<Real> householder_q(const matrix<Real>& A, std::size_t r, bool pivot)
 {
-   using std::sqrt;
-   const std::size_t m = A.size(), n = A[0].size(), steps = (std::min)((std::min)(m, n), r);
-   matrix<Real> vs;
-   std::vector<Real> beta;
-   for (std::size_t k = 0; k < steps; ++k)
-   {
-      if (pivot)
-      {
-         std::size_t best = k;
-         Real bn = -1;
-         for (std::size_t j = k; j < n; ++j)
-         {
-            Real s = 0;
-            for (std::size_t i = k; i < m; ++i) s += A[i][j] * A[i][j];
-            if (s > bn) { bn = s; best = j; }
-         }
-         if (best != k)
-            for (std::size_t i = 0; i < m; ++i) std::swap(A[i][k], A[i][best]);
-      }
-      std::vector<Real> v(m, Real(0));
-      Real nx = 0;
-      for (std::size_t i = k; i < m; ++i) { v[i] = A[i][k]; nx += v[i] * v[i]; }
-      nx = sqrt(nx);
-      Real b = 0;
-      if (nx > 0)
-      {
-         v[k] -= v[k] >= 0 ? -nx : nx;
-         Real vv = 0;
-         for (std::size_t i = k; i < m; ++i) vv += v[i] * v[i];
-         b = vv > 0 ? Real(2) / vv : Real(0);
-         for (std::size_t j = k; j < n; ++j)
-         {
-            Real s = 0;
-            for (std::size_t i = k; i < m; ++i) s += v[i] * A[i][j];
-            s *= b;
-            for (std::size_t i = k; i < m; ++i) A[i][j] -= s * v[i];
-         }
-      }
-      vs.push_back(v);
-      beta.push_back(b);
-   }
-   matrix<Real> Q = zeros<Real>(m, r);
-   for (std::size_t j = 0; j < r; ++j) Q[j][j] = 1;
-   for (std::size_t k = vs.size(); k-- > 0;)
-      for (std::size_t j = 0; j < r; ++j)
-      {
-         Real s = 0;
-         for (std::size_t i = k; i < m; ++i) s += vs[k][i] * Q[i][j];
-         s *= beta[k];
-         for (std::size_t i = k; i < m; ++i) Q[i][j] -= s * vs[k][i];
-      }
-   return Q;
+   const std::size_t m = A.size(), n = A[0].size();
+   std::vector<Real> f = flatten(A), Q(m * r);
+   tools::detail::householder_qr(f.data(), m, n, r, pivot, Q.data());
+   return unflatten(Q, m, r);
 }
 
 // The orthogonal polar factor of a square nonsingular matrix: scaled Newton, then Newton-Schulz
@@ -352,30 +306,11 @@ bool cdv_left_edge(const cdv_filter<Real>& f, const matrix<Real>& BE, std::size_
    }
    // R^T from the QR of M^T (M: n x c): an n x n lower triangular Rt with M M^T = Rt Rt^T
    auto factor = [&](const matrix<Real>& M) {
-      matrix<Real> Mt = transpose(M);
-      const std::size_t c = Mt.size();
-      for (std::size_t k = 0; k < n; ++k)
-      {
-         Real nx = 0;
-         for (std::size_t i = k; i < c; ++i) nx += Mt[i][k] * Mt[i][k];
-         nx = sqrt(nx);
-         if (nx == 0) continue;
-         std::vector<Real> v(c, Real(0));
-         for (std::size_t i = k; i < c; ++i) v[i] = Mt[i][k];
-         v[k] -= Mt[k][k] >= 0 ? -nx : nx;
-         Real vv = 0;
-         for (std::size_t i = k; i < c; ++i) vv += v[i] * v[i];
-         for (std::size_t j = k; j < n; ++j)
-         {
-            Real d = 0;
-            for (std::size_t i = k; i < c; ++i) d += v[i] * Mt[i][j];
-            d = 2 * d / vv;
-            for (std::size_t i = k; i < c; ++i) Mt[i][j] -= d * v[i];
-         }
-      }
+      std::vector<Real> Mt = flatten(transpose(M));
+      tools::detail::householder_qr(Mt.data(), Mt.size() / n, n, n, false, static_cast<Real*>(nullptr));
       matrix<Real> Rt = zeros<Real>(n, n);
       for (std::size_t i = 0; i < n; ++i)
-         for (std::size_t j = i; j < n; ++j) Rt[j][i] = Mt[i][j];
+         for (std::size_t j = i; j < n; ++j) Rt[j][i] = Mt[i * n + j];
       return Rt;
    };
    matrix<Real> F = factor(D), Ak = A;

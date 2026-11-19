@@ -19,9 +19,9 @@ import boost.math;
 #include <random>
 #include <vector>
 #endif
-using boost::math::optimization::detail::cholesky;
-using boost::math::optimization::detail::cholesky_solve;
-using boost::math::optimization::detail::forward_solve;
+using boost::math::tools::detail::cholesky;
+using boost::math::tools::detail::cholesky_solve;
+using boost::math::tools::detail::forward_solve;
 using boost::math::optimization::detail::gaussian_process;
 using boost::math::optimization::detail::gaussian_process_kernel;
 using boost::math::optimization::detail::gaussian_process_parameters;

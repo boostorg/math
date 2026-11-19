@@ -17,7 +17,7 @@
 #include <boost/math/constants/constants.hpp>
 #include <boost/multiprecision/cpp_bin_float.hpp>
 #include <array>
-#include <boost/type_index.hpp>
+#include <boost/core/demangle.hpp>
 #include "functor.hpp"
 
 #include "handle_test_result.hpp"
@@ -318,7 +318,7 @@ void test_legendre_p_prime()
 template<class Real>
 void test_legendre_p_zeros()
 {
-    std::cout << "Testing Legendre zeros on type " << boost::typeindex::type_id<Real>().pretty_name() << "\n";
+    std::cout << "Testing Legendre zeros on type " << boost::core::demangle(typeid(Real).name()) << "\n";
     using std::sqrt;
     using std::abs;
     using boost::math::legendre_p_zeros;

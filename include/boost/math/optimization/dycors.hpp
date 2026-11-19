@@ -12,6 +12,7 @@
 #include <atomic>
 #endif
 #include <boost/math/optimization/detail/common.hpp>
+#include <boost/math/tools/detail/linear_algebra/gauss_jordan.hpp>
 #ifndef BOOST_MATH_BUILD_MODULE
 #include <algorithm>
 #include <cmath>
@@ -236,9 +237,8 @@ private:
         }
       }
     }
-    // Gauss-Jordan elimination of [P_T | I], with partial pivoting:
     std::vector<double> A(n * n);
-    Pinv_.assign(n * n, 0.0);
+    Pinv_.resize(n * n);
     PhiT_.resize(n * n);
     for (size_t j = 0; j < n; ++j) {
       for (size_t k = 0; k < n; ++k) {
@@ -246,35 +246,8 @@ private:
       }
       A[j * n] = 1;
       std::copy(X_.data() + T_[j] * d_, X_.data() + (T_[j] + 1) * d_, A.data() + j * n + 1);
-      Pinv_[j * n + j] = 1;
     }
-    for (size_t j = 0; j < n; ++j) {
-      size_t p = j;
-      for (size_t k = j + 1; k < n; ++k) {
-        if (abs(A[k * n + j]) > abs(A[p * n + j])) {
-          p = k;
-        }
-      }
-      for (size_t i = 0; i < n; ++i) {
-        std::swap(A[j * n + i], A[p * n + i]);
-        std::swap(Pinv_[j * n + i], Pinv_[p * n + i]);
-      }
-      double const inv = 1 / A[j * n + j];
-      for (size_t i = 0; i < n; ++i) {
-        A[j * n + i] *= inv;
-        Pinv_[j * n + i] *= inv;
-      }
-      for (size_t k = 0; k < n; ++k) {
-        double const t = A[k * n + j];
-        if (k != j && t != 0) {
-          for (size_t i = 0; i < n; ++i) {
-            A[k * n + i] -= t * A[j * n + i];
-            Pinv_[k * n + i] -= t * Pinv_[j * n + i];
-          }
-        }
-      }
-    }
-    return true;
+    return tools::detail::gauss_jordan_inverse(A.data(), Pinv_.data(), n);
   }
 
   // The surrogate is the cubic radial basis function interpolant with a linear tail,

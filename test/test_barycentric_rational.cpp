@@ -7,7 +7,6 @@
 #include <cmath>
 #include <random>
 #include <boost/random/uniform_real_distribution.hpp>
-#include <boost/type_index.hpp>
 #include <boost/math/interpolators/barycentric_rational.hpp>
 #include <boost/multiprecision/cpp_bin_float.hpp>
 #include "math_unit_test.hpp"
@@ -28,7 +27,7 @@ using boost::multiprecision::cpp_bin_float_50;
 template<class Real>
 void test_interpolation_condition()
 {
-    std::cout << "Testing interpolation condition for barycentric interpolation on type " << boost::typeindex::type_id<Real>().pretty_name()  << "\n";
+    std::cout << "Testing interpolation condition for barycentric interpolation on type " << boost::math::test::detail::demangle(typeid(Real).name())  << "\n";
     std::mt19937 gen(4);
     boost::random::uniform_real_distribution<Real> dis(0.1f, 1);
     std::vector<Real> x(100);
@@ -64,7 +63,7 @@ void test_interpolation_condition()
 template<class Real>
 void test_interpolation_condition_high_order()
 {
-    std::cout << "Testing interpolation condition in high order for barycentric interpolation on type " << boost::typeindex::type_id<Real>().pretty_name()  << "\n";
+    std::cout << "Testing interpolation condition in high order for barycentric interpolation on type " << boost::math::test::detail::demangle(typeid(Real).name())  << "\n";
     std::mt19937 gen(5);
     boost::random::uniform_real_distribution<Real> dis(0.1f, 1);
     std::vector<Real> x(100);
@@ -91,7 +90,7 @@ void test_interpolation_condition_high_order()
 template<class Real>
 void test_constant()
 {
-    std::cout << "Testing that constants are interpolated correctly using barycentric interpolation on type " << boost::typeindex::type_id<Real>().pretty_name() << "\n";
+    std::cout << "Testing that constants are interpolated correctly using barycentric interpolation on type " << boost::math::test::detail::demangle(typeid(Real).name()) << "\n";
 
     std::mt19937 gen(6);
     boost::random::uniform_real_distribution<Real> dis(0.1f, 1);
@@ -121,7 +120,7 @@ void test_constant()
 template<class Real>
 void test_constant_high_order()
 {
-    std::cout << "Testing that constants are interpolated correctly in high order using barycentric interpolation on type " << boost::typeindex::type_id<Real>().pretty_name() << "\n";
+    std::cout << "Testing that constants are interpolated correctly in high order using barycentric interpolation on type " << boost::math::test::detail::demangle(typeid(Real).name()) << "\n";
 
     std::mt19937 gen(7);
     boost::random::uniform_real_distribution<Real> dis(0.1f, 1);
@@ -152,7 +151,7 @@ void test_constant_high_order()
 template<class Real>
 void test_runge()
 {
-    std::cout << "Testing interpolation of Runge's 1/(1+25x^2) function using barycentric interpolation on type " << boost::typeindex::type_id<Real>().pretty_name() << "\n";
+    std::cout << "Testing interpolation of Runge's 1/(1+25x^2) function using barycentric interpolation on type " << boost::math::test::detail::demangle(typeid(Real).name()) << "\n";
 
     std::mt19937 gen(8);
     boost::random::uniform_real_distribution<Real> dis(0.005f, 0.01f);
@@ -205,7 +204,7 @@ void test_runge()
 template<class Real>
 void test_prime_near_node()
 {
-    std::cout << "Testing the derivative a few ulps from a node on type " << boost::typeindex::type_id<Real>().pretty_name() << "\n";
+    std::cout << "Testing the derivative a few ulps from a node on type " << boost::math::test::detail::demangle(typeid(Real).name()) << "\n";
     // (r(x) - y_i)/(x - x_i) used to cancel catastrophically here: prime(x[7] + 1e-16) was -2.
     std::vector<Real> x(20);
     std::vector<Real> y(20);
@@ -234,7 +233,7 @@ void test_prime_near_node()
 template<class Real>
 void test_weights()
 {
-    std::cout << "Testing weights are calculated correctly using barycentric interpolation on type " << boost::typeindex::type_id<Real>().pretty_name() << "\n";
+    std::cout << "Testing weights are calculated correctly using barycentric interpolation on type " << boost::math::test::detail::demangle(typeid(Real).name()) << "\n";
 
     std::mt19937 gen(9);
     boost::random::uniform_real_distribution<Real> dis(0.005, 0.01);
