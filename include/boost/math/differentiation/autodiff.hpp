@@ -395,8 +395,8 @@ class fvar {
   // x y' = p x' y and y[0] = y0: pow(x, p). Requires x[0] != 0.
   fvar integrate_pow(RealType const& y0, root_type const& p) const;
 
-  // s' = c x' and c' = sign * s x': {sin, cos} for sign = -1, {sinh, cosh} for sign = 1.
-  std::pair<fvar, fvar> integrate_sin_cos(RealType const& s0, RealType const& c0, int sign) const;
+  // s' = c x' and c' = sign * s x': {sin(x), cos(x)} for sign = -1, {sinh(x), cosh(x)} for sign = 1.
+  std::pair<fvar, fvar> integrate_sin_cos(int sign) const;
 
  private:
   RealType epsilon_inner_product(size_t z0,
@@ -1333,12 +1333,39 @@ fvar<RealType, Order> fvar<RealType, Order>::epsilon_multiply(size_t z0,
 }
 #endif
 
+template <typename RealType>
+bool is_zero(RealType const& x) {
+  return x == 0;
+}
+
+template <typename RealType, size_t Order>
+bool is_zero(fvar<RealType, Order> const& x) {
+  for (size_t i = 0; i <= Order; ++i)
+    if (!is_zero(x[i]))
+      return false;
+  return true;
+}
+
+// {sin(x), cos(x)} for sign = -1, {sinh(x), cosh(x)} for sign = 1.
+template <typename RealType>
+std::pair<RealType, RealType> sin_cos(RealType const& x, int sign) {
+  BOOST_MATH_STD_USING
+  return sign < 0 ? std::make_pair(sin(x), cos(x)) : std::make_pair(sinh(x), cosh(x));
+}
+
+template <typename RealType, size_t Order>
+std::pair<fvar<RealType, Order>, fvar<RealType, Order>> sin_cos(fvar<RealType, Order> const& x, int sign) {
+  return x.integrate_sin_cos(sign);
+}
+
 // Coefficient k of the y with y' = g x': k y_k = sum_{j=1}^{k} j x_j g_{k-j}. Reads g[0..k-1] only.
+// A zero x_j is skipped, as g_{k-j} may be infinite.
 template <typename RealType, size_t Order>
 RealType fvar<RealType, Order>::ode_coefficient(size_t k, fvar<RealType, Order> const& g) const {
   RealType sum(0);
   for (size_t j = 1; j <= k; ++j)
-    sum += static_cast<root_type>(j) * v[j] * g.v[k - j];
+    if (!is_zero(v[j]))
+      sum += static_cast<root_type>(j) * v[j] * g.v[k - j];
   return sum / static_cast<root_type>(k);
 }
 
@@ -1377,12 +1404,11 @@ fvar<RealType, Order> fvar<RealType, Order>::integrate_pow(RealType const& y0, r
 
 template <typename RealType, size_t Order>
 std::pair<fvar<RealType, Order>, fvar<RealType, Order>> fvar<RealType, Order>::integrate_sin_cos(
-    RealType const& s0,
-    RealType const& c0,
     int sign) const {
+  std::pair<RealType, RealType> const y0 = sin_cos(v.front(), sign);
   std::pair<fvar<RealType, Order>, fvar<RealType, Order>> y;
-  y.first.v.front() = s0;
-  y.second.v.front() = c0;
+  y.first.v.front() = y0.first;
+  y.second.v.front() = y0.second;
   for (size_t k = 1; k <= Order; ++k) {
     y.first.v[k] = ode_coefficient(k, y.second);
     y.second.v[k] = static_cast<root_type>(sign) * ode_coefficient(k, y.first);
@@ -1500,6 +1526,10 @@ fvar<RealType, Order> pow(fvar<RealType, Order> const& x,
   using root_type = typename fvar<RealType, Order>::root_type;
   constexpr size_t order = fvar<RealType, Order>::order_sum;
   root_type const x0 = static_cast<root_type>(x);
+  // Not for the polynomials x^0, x^1, ..., whose higher derivatives the code below makes exactly zero.
+  if (std::numeric_limits<root_type>::epsilon() <= fabs(x0) && fabs(x0) <= (std::numeric_limits<root_type>::max)() &&
+      !(0 <= y && y < order && floor(y) == y))
+    return x.integrate_pow(pow(x[0], y), y);
   root_type derivatives[order + 1]{pow(x0, y)};
   if (fabs(x0) < std::numeric_limits<root_type>::epsilon()) {
     root_type coef = 1;
@@ -1509,7 +1539,9 @@ fvar<RealType, Order> pow(fvar<RealType, Order> const& x,
     }
     return x.apply_derivatives_nonhorner(order, [&derivatives](size_t i) { return derivatives[i]; });
   } else {
-    return x.integrate_pow(pow(x[0], y), y);
+    for (size_t i = 0; i < order && y - i != 0; ++i)
+      derivatives[i + 1] = (y - i) * derivatives[i] / x0;
+    return x.apply_derivatives(order, [&derivatives](size_t i) { return derivatives[i]; });
   }
 }
 
@@ -1564,7 +1596,7 @@ fvar<RealType, Order> sqrt(fvar<RealType, Order> const& cr) {
   using std::sqrt;
   using root_type = typename fvar<RealType, Order>::root_type;
   constexpr size_t order = fvar<RealType, Order>::order_sum;
-  if (!(cr < std::numeric_limits<root_type>::epsilon()))
+  if (cr >= std::numeric_limits<root_type>::epsilon() && cr <= (std::numeric_limits<root_type>::max)())
     return cr.integrate_pow(sqrt(cr[0]), root_type(0.5));
   root_type derivatives[order + 1];
   root_type const x = static_cast<root_type>(cr);
@@ -1586,7 +1618,9 @@ fvar<RealType, Order> sqrt(fvar<RealType, Order> const& cr) {
       derivatives[i] = numerator / (powers * *derivatives);
     }
     auto const f = [&derivatives](size_t i) { return derivatives[i]; };
-    return cr.apply_derivatives_nonhorner(order, f);
+    if (cr < std::numeric_limits<root_type>::epsilon())
+      return cr.apply_derivatives_nonhorner(order, f);
+    return cr.apply_derivatives(order, f);
   }
 }
 
@@ -1625,14 +1659,12 @@ fvar<RealType, Order> ldexp(fvar<RealType, Order> const& cr, int exp) {
 
 template <typename RealType, size_t Order>
 fvar<RealType, Order> cos(fvar<RealType, Order> const& cr) {
-  BOOST_MATH_STD_USING
-  return cr.integrate_sin_cos(sin(cr[0]), cos(cr[0]), -1).second;
+  return cr.integrate_sin_cos(-1).second;
 }
 
 template <typename RealType, size_t Order>
 fvar<RealType, Order> sin(fvar<RealType, Order> const& cr) {
-  BOOST_MATH_STD_USING
-  return cr.integrate_sin_cos(sin(cr[0]), cos(cr[0]), -1).first;
+  return cr.integrate_sin_cos(-1).first;
 }
 
 template <typename RealType, size_t Order>
@@ -1817,8 +1849,7 @@ fvar<RealType, Order> atanh(fvar<RealType, Order> const& cr) {
 
 template <typename RealType, size_t Order>
 fvar<RealType, Order> cosh(fvar<RealType, Order> const& cr) {
-  BOOST_MATH_STD_USING
-  return cr.integrate_sin_cos(sinh(cr[0]), cosh(cr[0]), 1).second;
+  return cr.integrate_sin_cos(1).second;
 }
 
 template <typename RealType, size_t Order>
@@ -1925,8 +1956,7 @@ fvar<RealType, Order> sinc(fvar<RealType, Order> const& cr) {
 
 template <typename RealType, size_t Order>
 fvar<RealType, Order> sinh(fvar<RealType, Order> const& cr) {
-  BOOST_MATH_STD_USING
-  return cr.integrate_sin_cos(sinh(cr[0]), cosh(cr[0]), 1).first;
+  return cr.integrate_sin_cos(1).first;
 }
 
 template <typename RealType, size_t Order>
