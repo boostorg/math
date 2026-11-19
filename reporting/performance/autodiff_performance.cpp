@@ -6,6 +6,8 @@
 // Build: c++ -std=c++17 -O2 -I../../include autodiff_performance.cpp -lbenchmark -o autodiff_performance
 
 #include <cmath>
+#include <tuple>
+#include <type_traits>
 #include <utility>
 #include <vector>
 #include <benchmark/benchmark.h>
@@ -15,6 +17,7 @@
 #include <boost/math/tools/rational.hpp>
 
 using boost::math::constants::one_div_root_two;
+using boost::math::differentiation::make_ftuple;
 using boost::math::differentiation::make_fvar;
 using boost::math::generate_random_uniform_vector;
 using boost::math::tools::evaluate_polynomial;
@@ -29,21 +32,30 @@ Real transcendental(const Real& x)
     return exp(sin(x)) * log(1.0 + x * x) / sqrt(x);
 }
 
-// From example/autodiff_black_scholes.cpp.
-template<class Real>
-Real black_scholes(const Real& S)
+template<class X, class Y>
+auto two_variables(const X& x, const Y& y)
 {
-    using std::erfc;
-    using std::log;
+    return exp(sin(x) * y) * log(1.0 + x * x + y * y) / sqrt(x * y);
+}
+
+template<class X, class Y, class Z>
+auto three_variables(const X& x, const Y& y, const Z& z)
+{
+    return exp(sin(x) * y) * log(1.0 + x * x + z * z) / sqrt(y * z) + cos(x * z) * erfc(y);
+}
+
+// From example/autodiff_black_scholes.cpp.
+template<class Price, class Sigma, class Tau, class Rate>
+auto black_scholes(const Price& S, const Sigma& sigma, const Tau& tau, const Rate& r)
+{
+    using std::exp;
+    using std::sqrt;
     constexpr double K = 100.0;
-    constexpr double sigma = 0.25;
-    constexpr double tau = 0.5;
-    constexpr double r = 0.01;
-    const double sst = sigma * std::sqrt(tau);
-    const Real d1 = (log(S / K) + (r + sigma * sigma / 2) * tau) / sst;
-    const Real d2 = d1 - sst;
-    auto Phi = [](const Real& z) { return 0.5 * erfc(-one_div_root_two<double>() * z); };
-    return S * Phi(d1) - std::exp(-r * tau) * K * Phi(d2);
+    const auto sst = sigma * sqrt(tau);
+    const auto d1 = (log(S / K) + (r + sigma * sigma / 2) * tau) / sst;
+    const auto d2 = d1 - sst;
+    auto Phi = [](const auto& z) { return 0.5 * erfc(-one_div_root_two<double>() * z); };
+    return S * Phi(d1) - exp(-r * tau) * K * Phi(d2);
 }
 
 // Excess Gibbs energy of a mixed-solvent electrolyte (MSE model) as a function of the
@@ -104,6 +116,14 @@ void run_at_order(benchmark::State& state, double x, F f)
     run_at_order(state, x, f, std::make_index_sequence<32>());
 }
 
+// Calls f(std::integral_constant<std::size_t, N>()), N = state.range(0): the order in each variable.
+template<class F, std::size_t... Orders>
+void run_at_order(benchmark::State& state, F f, std::index_sequence<Orders...>)
+{
+    const auto order = static_cast<std::size_t>(state.range(0));
+    ((order == Orders + 1 ? f(std::integral_constant<std::size_t, Orders + 1>()) : void()), ...);
+}
+
 void Horner(benchmark::State& state)
 {
     const auto c = generate_random_uniform_vector<double>(64, 12345, -1, 1);
@@ -117,7 +137,48 @@ void Transcendental(benchmark::State& state)
 
 void BlackScholes(benchmark::State& state)
 {
-    run_at_order(state, 105.0, [](const auto& S) { return black_scholes(S); });
+    run_at_order(state, 105.0, [](const auto& S) { return black_scholes(S, 0.25, 0.5, 0.01); });
+}
+
+void TwoVariables(benchmark::State& state)
+{
+    auto f = [&](auto order) {
+        constexpr std::size_t N = decltype(order)::value;
+        const auto v = make_ftuple<double, N, N>(1.3, 0.7);
+        for (auto _ : state)
+        {
+            benchmark::DoNotOptimize(two_variables(std::get<0>(v), std::get<1>(v)));
+        }
+    };
+    run_at_order(state, f, std::make_index_sequence<12>());
+}
+
+void ThreeVariables(benchmark::State& state)
+{
+    auto f = [&](auto order) {
+        constexpr std::size_t N = decltype(order)::value;
+        const auto v = make_ftuple<double, N, N, N>(1.3, 0.7, 2.1);
+        for (auto _ : state)
+        {
+            benchmark::DoNotOptimize(three_variables(std::get<0>(v), std::get<1>(v), std::get<2>(v)));
+        }
+    };
+    run_at_order(state, f, std::make_index_sequence<6>());
+}
+
+// The price as a function of (S, sigma, tau, r).
+void BlackScholesFourVariables(benchmark::State& state)
+{
+    auto f = [&](auto order) {
+        constexpr std::size_t N = decltype(order)::value;
+        const auto v = make_ftuple<double, N, N, N, N>(105.0, 0.25, 0.5, 0.01);
+        for (auto _ : state)
+        {
+            benchmark::DoNotOptimize(
+                black_scholes(std::get<0>(v), std::get<1>(v), std::get<2>(v), std::get<3>(v)));
+        }
+    };
+    run_at_order(state, f, std::make_index_sequence<4>());
 }
 
 // 16 species: a solvent, alternating cations and anions, and a neutral solute.
@@ -140,5 +201,8 @@ BENCHMARK(Horner)->DenseRange(1, 32)->Complexity();
 BENCHMARK(Transcendental)->DenseRange(1, 32)->Complexity();
 BENCHMARK(BlackScholes)->DenseRange(1, 32)->Complexity();
 BENCHMARK(MseGibbsEnergy)->DenseRange(1, 32)->Complexity();
+BENCHMARK(TwoVariables)->DenseRange(1, 12);
+BENCHMARK(ThreeVariables)->DenseRange(1, 6);
+BENCHMARK(BlackScholesFourVariables)->DenseRange(1, 4);
 
 BENCHMARK_MAIN();
