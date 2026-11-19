@@ -417,11 +417,7 @@ class fvar {
 
   fvar inverse_apply() const;
 
-  // Coefficient k of y with y' = g x', called on d = dx(n).
-  RealType ode_coefficient(size_t k, fvar const& g, size_t n) const;
-
-  // d = {j x_j}, the coefficients of x' shifted up by one; n is the index of its last nonzero coefficient.
-  fvar dx(size_t& n) const;
+  RealType ode_coefficient(size_t k, fvar const& g) const;
 
   fvar& multiply_assign_by_root_type(bool is_root, root_type const&);
 
@@ -638,6 +634,9 @@ fvar<RealType, Order> lambert_w0(fvar<RealType, Order> const&);
 
 template <typename RealType, size_t Order>
 fvar<RealType, Order> lgamma(fvar<RealType, Order> const&);
+
+template <typename RealType, size_t Order>
+fvar<RealType, Order> rsqrt(fvar<RealType, Order> const&);
 
 template <typename RealType, size_t Order>
 fvar<RealType, Order> sinc(fvar<RealType, Order> const&);
@@ -1366,34 +1365,22 @@ std::pair<fvar<RealType, Order>, fvar<RealType, Order>> sin_cos(fvar<RealType, O
 }
 
 // Coefficient k of the y with y' = g x': k y_k = sum_{j=1}^{k} j x_j g_{k-j}. Reads g[0..k-1] only.
-// A zero d_j is skipped, as g_{k-j} may be infinite; the loop stops at n, past which every d_j is zero.
+// A zero x_j is skipped, as g_{k-j} may be infinite.
 template <typename RealType, size_t Order>
-RealType fvar<RealType, Order>::ode_coefficient(size_t k, fvar<RealType, Order> const& g, size_t n) const {
+RealType fvar<RealType, Order>::ode_coefficient(size_t k, fvar<RealType, Order> const& g) const {
   RealType sum(0);
-  for (size_t j = 1; j <= (std::min)(k, n); ++j)
+  for (size_t j = 1; j <= k; ++j)
     if (!is_zero(v[j]))
-      sum += v[j] * g.v[k - j];
+      sum += static_cast<root_type>(j) * v[j] * g.v[k - j];
   return sum / static_cast<root_type>(k);
-}
-
-template <typename RealType, size_t Order>
-fvar<RealType, Order> fvar<RealType, Order>::dx(size_t& n) const {
-  fvar<RealType, Order> d;
-  n = 0;
-  for (size_t j = 1; j <= Order; ++j)
-    if (!is_zero(d.v[j] = static_cast<root_type>(j) * v[j]))
-      n = j;
-  return d;
 }
 
 template <typename RealType, size_t Order>
 fvar<RealType, Order> fvar<RealType, Order>::integrate(RealType const& y0) const {
   fvar<RealType, Order> y;
   y.v.front() = y0;
-  size_t n;
-  fvar<RealType, Order> const d = dx(n);
   for (size_t k = 1; k <= Order; ++k)
-    y.v[k] = d.ode_coefficient(k, y, n);
+    y.v[k] = ode_coefficient(k, y);
   return y;
 }
 
@@ -1402,10 +1389,8 @@ fvar<RealType, Order> fvar<RealType, Order>::integrate(RealType const& y0,
                                                        fvar<RealType, Order> const& g) const {
   fvar<RealType, Order> y;
   y.v.front() = y0;
-  size_t n;
-  fvar<RealType, Order> const d = dx(n);
   for (size_t k = 1; k <= Order; ++k)
-    y.v[k] = d.ode_coefficient(k, g, n);
+    y.v[k] = ode_coefficient(k, g);
   return y;
 }
 
@@ -1444,11 +1429,9 @@ std::pair<fvar<RealType, Order>, fvar<RealType, Order>> fvar<RealType, Order>::i
   std::pair<fvar<RealType, Order>, fvar<RealType, Order>> y;
   y.first.v.front() = y0.first;
   y.second.v.front() = y0.second;
-  size_t n;
-  fvar<RealType, Order> const d = dx(n);
   for (size_t k = 1; k <= Order; ++k) {
-    y.first.v[k] = d.ode_coefficient(k, y.second, n);
-    y.second.v[k] = static_cast<root_type>(sign) * d.ode_coefficient(k, y.first, n);
+    y.first.v[k] = ode_coefficient(k, y.second);
+    y.second.v[k] = static_cast<root_type>(sign) * ode_coefficient(k, y.first);
   }
   return y;
 }
@@ -1661,6 +1644,17 @@ fvar<RealType, Order> sqrt(fvar<RealType, Order> const& cr) {
   }
 }
 
+// The overload of boost::math::rsqrt. std::pow costs more than std::sqrt and a division, so it is left to the
+// singular arguments.
+template <typename RealType, size_t Order>
+fvar<RealType, Order> rsqrt(fvar<RealType, Order> const& cr) {
+  using std::sqrt;
+  using root_type = typename fvar<RealType, Order>::root_type;
+  if (cr >= std::numeric_limits<root_type>::epsilon() && cr <= (std::numeric_limits<root_type>::max)())
+    return cr.integrate_pow(1 / sqrt(cr[0]), root_type(-0.5));
+  return pow(cr, root_type(-0.5));
+}
+
 // Natural logarithm. If cr==0 then derivative(i) may have nans due to nans from inverse().
 template <typename RealType, size_t Order>
 fvar<RealType, Order> log(fvar<RealType, Order> const& cr) {
@@ -1707,7 +1701,7 @@ fvar<RealType, Order> sin(fvar<RealType, Order> const& cr) {
 template <typename RealType, size_t Order>
 fvar<RealType, Order> asin(fvar<RealType, Order> const& cr) {
   using std::asin;
-  return cr.integrate(asin(cr[0]), pow((cr * cr).negate() += 1, -0.5));  // asin'(x) = 1 / sqrt(1-x*x)
+  return cr.integrate(asin(cr[0]), rsqrt((cr * cr).negate() += 1));  // asin'(x) = 1 / sqrt(1-x*x)
 }
 
 template <typename RealType, size_t Order>
@@ -1863,19 +1857,19 @@ std::ostream& operator<<(std::ostream& out, fvar<RealType, Order> const& cr) {
 template <typename RealType, size_t Order>
 fvar<RealType, Order> acos(fvar<RealType, Order> const& cr) {
   using std::acos;
-  return cr.integrate(acos(cr[0]), pow((cr * cr).negate() += 1, -0.5).negate());  // acos'(x) = -1 / sqrt(1-x*x)
+  return cr.integrate(acos(cr[0]), rsqrt((cr * cr).negate() += 1).negate());  // acos'(x) = -1 / sqrt(1-x*x)
 }
 
 template <typename RealType, size_t Order>
 fvar<RealType, Order> acosh(fvar<RealType, Order> const& cr) {
   using BOOST_MATH_NAMESPACE::acosh;
-  return cr.integrate(acosh(cr[0]), pow((cr * cr) -= 1, -0.5));  // acosh'(x) = 1 / sqrt(x*x-1)
+  return cr.integrate(acosh(cr[0]), rsqrt((cr * cr) -= 1));  // acosh'(x) = 1 / sqrt(x*x-1)
 }
 
 template <typename RealType, size_t Order>
 fvar<RealType, Order> asinh(fvar<RealType, Order> const& cr) {
   using BOOST_MATH_NAMESPACE::asinh;
-  return cr.integrate(asinh(cr[0]), pow((cr * cr) += 1, -0.5));  // asinh'(x) = 1 / sqrt(x*x+1)
+  return cr.integrate(asinh(cr[0]), rsqrt((cr * cr) += 1));  // asinh'(x) = 1 / sqrt(x*x+1)
 }
 
 template <typename RealType, size_t Order>

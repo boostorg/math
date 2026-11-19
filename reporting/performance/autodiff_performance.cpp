@@ -32,6 +32,12 @@ Real transcendental(const Real& x)
     return exp(sin(x)) * log(1.0 + x * x) / sqrt(x);
 }
 
+template<class Real>
+Real inverse_functions(const Real& x)
+{
+    return asin(x) * acosh(1.0 + x) + acos(x) * asinh(x);
+}
+
 template<class X, class Y>
 auto two_variables(const X& x, const Y& y)
 {
@@ -135,6 +141,11 @@ void Transcendental(benchmark::State& state)
     run_at_order(state, 2.5, [](const auto& x) { return transcendental(x); });
 }
 
+void InverseFunctions(benchmark::State& state)
+{
+    run_at_order(state, 0.5, [](const auto& x) { return inverse_functions(x); });
+}
+
 void BlackScholes(benchmark::State& state)
 {
     run_at_order(state, 105.0, [](const auto& S) { return black_scholes(S, 0.25, 0.5, 0.01); });
@@ -199,6 +210,7 @@ void MseGibbsEnergy(benchmark::State& state)
 
 BENCHMARK(Horner)->DenseRange(1, 32)->Complexity();
 BENCHMARK(Transcendental)->DenseRange(1, 32)->Complexity();
+BENCHMARK(InverseFunctions)->DenseRange(1, 32)->Complexity();
 BENCHMARK(BlackScholes)->DenseRange(1, 32)->Complexity();
 BENCHMARK(MseGibbsEnergy)->DenseRange(1, 32)->Complexity();
 BENCHMARK(TwoVariables)->DenseRange(1, 12);

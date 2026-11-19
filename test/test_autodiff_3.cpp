@@ -72,6 +72,17 @@ void erf_test() {
 }
 
 template <class T>
+void rsqrt_test() {
+  const T eps = 100 * boost::math::tools::epsilon<T>();
+  const auto y = rsqrt(make_fvar<T, 4>(4));
+  CHECK_RELATIVE_ERROR(y.derivative(0u), T(1) / 2, eps);
+  CHECK_RELATIVE_ERROR(y.derivative(1u), T(-1) / 16, eps);
+  CHECK_RELATIVE_ERROR(y.derivative(2u), T(3) / 128, eps);
+  CHECK_RELATIVE_ERROR(y.derivative(3u), T(-15) / 1024, eps);
+  CHECK_RELATIVE_ERROR(y.derivative(4u), T(105) / 8192, eps);
+}
+
+template <class T>
 void sinc_test() {
   BOOST_MATH_STD_USING
   const T eps = 20000 * boost::math::tools::epsilon<T>(); // percent
@@ -368,6 +379,7 @@ int main()
    boost::mp11::mp_for_each<boost::mp11::mp_transform<boost::mp11::mp_identity, all_float_types>>([](auto t) { atan_test<typename decltype(t)::type>(); });
    boost::mp11::mp_for_each<boost::mp11::mp_transform<boost::mp11::mp_identity, all_float_types>>([](auto t) { erf_test<typename decltype(t)::type>(); });
    boost::mp11::mp_for_each<boost::mp11::mp_transform<boost::mp11::mp_identity, bin_float_types>>([](auto t) { sinc_test<typename decltype(t)::type>(); });
+   boost::mp11::mp_for_each<boost::mp11::mp_transform<boost::mp11::mp_identity, all_float_types>>([](auto t) { rsqrt_test<typename decltype(t)::type>(); });
    boost::mp11::mp_for_each<boost::mp11::mp_transform<boost::mp11::mp_identity, bin_float_types>>([](auto t) { sinh_and_cosh<typename decltype(t)::type>(); });
 #ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
    boost::mp11::mp_for_each<boost::mp11::mp_transform<boost::mp11::mp_identity, all_float_types>>([](auto t) { tanh_test<typename decltype(t)::type>(); });
