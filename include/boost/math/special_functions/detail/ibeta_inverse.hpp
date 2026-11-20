@@ -779,7 +779,19 @@ BOOST_MATH_GPU_ENABLED T ibeta_inv_imp(T a, T b, T p, T q, const Policy& pol, T*
             xg = 2 / tools::epsilon<T>();
       }
       else
-         xg = pow(a * p * bet, 1/a);
+      {
+         const T ap = a * p;
+         const T power_base = ap * bet;
+         xg = pow(power_base, 1/a);
+         const T min_value = tools::min_value<T>();
+         // The series correction is negligible here, and iteration clips subnormal roots.
+         if((xg <= min_value) && (min_value <= tools::epsilon<T>()) && (ap >= min_value) && (power_base <= 0.5f))
+         {
+            if(py)
+               *py = invert ? xg : 1 - xg;
+            return invert ? 1 - xg : xg;
+         }
+      }
       x = xg / (1 + xg);
       y = 1 / (1 + xg);
       //
