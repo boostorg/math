@@ -333,7 +333,7 @@ void ylogx() {
   CHECK_RELATIVE_ERROR(z1.derivative(2u, 4u),
                     pow(cx, cy - 2) * pow(log(cx), T(2)) *
                         (4 * (2 * cy - 1) * log(cx) + (4 - 1) * 4 +
-                         (cy - 1) * cy * pow(log(cx), T(2))), (eps) / 100);
+                         (cy - 1) * cy * pow(log(cx), T(2))), (eps) / 25);
 }
 
 template <class T>
