@@ -11,11 +11,7 @@
 #include <boost/math/concepts/real_concept.hpp> // for real_concept
 #include <boost/math/distributions/hypergeometric.hpp>
 
-#define BOOST_TEST_MAIN
-#include <boost/test/unit_test.hpp> // Boost.Test
-#include <boost/test/results_collector.hpp>
-#include <boost/test/unit_test.hpp>
-#include <boost/test/tools/floating_point_comparison.hpp>
+#include "math_unit_test.hpp"
 
 #include <iostream>
 #include <cstdlib>
@@ -24,8 +20,11 @@
    using std::setprecision;
 
 #include <array>
-#include "functor.hpp"
-#include "handle_test_result.hpp"
+#include <boost/math/special_functions/relative_difference.hpp>
+#include <boost/math/tools/precision.hpp>
+#include <boost/math/tools/stats.hpp>
+#include <iomanip>
+#include <stdexcept>
 #include "table_type.hpp"
 #include <cstdint>
 
@@ -37,11 +36,9 @@
 #  pragma clang diagnostic ignored "-Wliteral-range"
 #endif
 
-#define BOOST_CHECK_EX(a) \
+#define CHECK_EX(a) \
    {\
-      unsigned int failures = boost::unit_test::results_collector.results( boost::unit_test::framework::current_test_case().p_id ).p_assertions_failed;\
-      BOOST_CHECK(a); \
-      if(failures != boost::unit_test::results_collector.results( boost::unit_test::framework::current_test_case().p_id ).p_assertions_failed)\
+      if(!CHECK_TRUE(a))\
       {\
          std::cerr << "Failure was with data ";\
          std::cerr << std::setprecision(35); \
@@ -50,70 +47,38 @@
       }\
    }
 
-void expected_results()
+struct error_bound { double peak, mean; };
+
+// The largest errors expected of each type, in units of epsilon:
+template <class Real>
+error_bound expected_error(bool random_data)
 {
-   //
-   // Define the max and mean errors expected for
-   // various compilers and platforms.
-   //
-   const char* largest_type;
+   const bool is_concept = std::is_same<Real, boost::math::concepts::real_concept>::value;
+   const bool is_double = std::is_same<Real, double>::value;
+   bool is_largest = is_concept || std::is_same<Real, long double>::value;
 #ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
-   if(!boost::math::policies::promote_double<>() || boost::math::policies::digits<double, boost::math::policies::policy<> >() == boost::math::policies::digits<long double, boost::math::policies::policy<> >())
+   using namespace boost::math::policies;
+   if(!promote_double<>() || digits<double, policy<> >() == digits<long double, policy<> >())
    {
-      largest_type = "(long\\s+)?double|real_concept";
+      is_largest = is_largest || is_double;
    }
-   else
+   else if(is_double && (boost::math::tools::digits<long double>() < 100))
    {
-      largest_type = "long double|real_concept";
+      // Some split of errors from long double into double:
+      return random_data ? error_bound{ 1500, 1500 } : error_bound{ 10, 10 };
    }
 #else
-   largest_type = "(long\\s+)?double";
+   is_largest = is_largest || is_double;
 #endif
-#ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
-   if(boost::math::policies::promote_double<>() && (boost::math::tools::digits<long double>() > boost::math::tools::digits<double>())
-      && (boost::math::tools::digits<long double>() < 100))
+   if(random_data && is_concept)
    {
-      //
-      // Some split of errors from long double into double:
-      //
-      add_expected_result(
-         ".*",                          // compiler
-         ".*",                          // stdlib
-         ".*",                          // platform
-         "double",                      // test type(s)
-         "Random.*",                    // test data group
-         ".*", 1500, 1500);      // test function
-      add_expected_result(
-         ".*",                          // compiler
-         ".*",                          // stdlib
-         ".*",                          // platform
-         "double",                      // test type(s)
-         ".*",                    // test data group
-         ".*", 10, 10);      // test function
+      return { 250000000, 25000000 };
    }
-#endif
-
-   add_expected_result(
-      ".*",                          // compiler
-      ".*",                          // stdlib
-      ".*",                          // platform
-      "real_concept",                // test type(s)
-      "Random.*",                    // test data group
-      ".*", 250000000, 25000000);    // test function
-   add_expected_result(
-      ".*",                          // compiler
-      ".*",                          // stdlib
-      ".*",                          // platform
-      largest_type,                  // test type(s)
-      "Random.*",                    // test data group
-      ".*", 10000000, 5000000);      // test function
-   add_expected_result(
-      ".*",                          // compiler
-      ".*",                          // stdlib
-      ".*",                          // platform
-      largest_type,                  // test type(s)
-      ".*",                          // test data group
-      ".*", 50, 20);                 // test function
+   if(is_largest)
+   {
+      return random_data ? error_bound{ 10000000, 5000000 } : error_bound{ 50, 20 };
+   }
+   return { 1, 1 };
 }
 
 template <class T>
@@ -148,69 +113,63 @@ T ccdf_tester(T r, T n, T N, T x)
    return cdf(complement(d, x));
 }
 
-template <class Real, class T>
-void do_test_hypergeometric(const T& data, const char* type_name, const char* test_name)
+// Checks f against column result_column of the table, whose first four columns are its arguments:
+template <class Real, class T, class F>
+void test_table(const T& data, F f, unsigned result_column, const char* type_name, const char* function_name, error_bound bound)
 {
-   // warning suppression:
-   (void)data;
-   (void)type_name;
-   (void)test_name;
+   boost::math::tools::stats<Real> errors;
+   std::size_t worst = 0;
+   for(std::size_t i = 0; i < data.size(); ++i)
+   {
+      const Real expected = data[i][result_column];
+      Real computed = expected;
+      try
+      {
+         computed = f(Real(data[i][0]), Real(data[i][1]), Real(data[i][2]), Real(data[i][3]));
+      }
+      catch(const std::underflow_error&)
+      {
+         computed = 0;
+      }
+      catch(const std::overflow_error&)
+      {
+         computed = boost::math::tools::max_value<Real>();
+      }
+      catch(const std::exception& e)
+      {
+         CHECK_TRUE(false);
+         std::cerr << "  " << function_name << "<" << type_name << "> row " << i << ": " << e.what() << "\n";
+      }
+      const Real error = boost::math::relative_difference(computed, expected);
+      if(!(error <= (errors.max)()))
+      {
+         worst = i;
+      }
+      // A non-finite result where a finite one is expected, or a gross error, fails by itself:
+      if(!CHECK_TRUE(error <= 0.5f))
+      {
+         std::cerr << "  " << function_name << "<" << type_name << "> row " << i << ": found " << std::setprecision(35) << computed << ", expected " << expected << "\n";
+      }
+      errors.add(error);
+   }
+   const Real eps = boost::math::tools::epsilon<Real>();
+   const Real peak = (errors.max)() / eps;
+   const Real mean = errors.rms() / eps;
+   std::cout << std::setprecision(4) << function_name << "<" << type_name << "> Max = " << peak << " RMS Mean=" << mean << ", worst at row " << worst << std::endl;
+   CHECK_TRUE(peak <= bound.peak);
+   CHECK_TRUE(mean <= bound.mean);
+}
 
-#if !defined(TEST_QUANT) || (TEST_QUANT == 0)
-   typedef Real                   value_type;
-
-   typedef value_type (*pg)(value_type, value_type, value_type, value_type);
-#if defined(BOOST_MATH_NO_DEDUCED_FUNCTION_POINTERS)
-   pg funcp = pdf_tester<value_type>;
-#else
-   pg funcp = pdf_tester;
-#endif
-
-   boost::math::tools::test_result<value_type> result;
-
+template <class Real, class T>
+void do_test_hypergeometric(const T& data, const char* type_name, const char* test_name, error_bound bound)
+{
    std::cout << "Testing " << test_name << " with type " << type_name
       << "\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n";
 
-   //
-   // test hypergeometric against data:
-   //
-   result = boost::math::tools::test_hetero<Real>(
-      data,
-      bind_func<Real>(funcp, 0, 1, 2, 3),
-      extract_result<Real>(4));
-   handle_test_result(result, data[result.worst()], result.worst(), type_name, "hypergeometric PDF", test_name);
-
-#if defined(BOOST_MATH_NO_DEDUCED_FUNCTION_POINTERS)
-   funcp = cdf_tester<value_type>;
-#else
-   funcp = cdf_tester;
-#endif
-
-   //
-   // test hypergeometric against data:
-   //
-   result = boost::math::tools::test_hetero<Real>(
-      data,
-      bind_func<Real>(funcp, 0, 1, 2, 3),
-      extract_result<Real>(5));
-   handle_test_result(result, data[result.worst()], result.worst(), type_name, "hypergeometric CDF", test_name);
-
-#if defined(BOOST_MATH_NO_DEDUCED_FUNCTION_POINTERS)
-   funcp = ccdf_tester<value_type>;
-#else
-   funcp = ccdf_tester;
-#endif
-
-   //
-   // test hypergeometric against data:
-   //
-   result = boost::math::tools::test_hetero<Real>(
-      data,
-      bind_func<Real>(funcp, 0, 1, 2, 3),
-      extract_result<Real>(6));
-   handle_test_result(result, data[result.worst()], result.worst(), type_name, "hypergeometric CDF complement", test_name);
+   test_table<Real>(data, pdf_tester<Real>, 4, type_name, "hypergeometric PDF", bound);
+   test_table<Real>(data, cdf_tester<Real>, 5, type_name, "hypergeometric CDF", bound);
+   test_table<Real>(data, ccdf_tester<Real>, 6, type_name, "hypergeometric CDF complement", bound);
    std::cout << std::endl;
-#endif
 }
 
 template <class Real, class T>
@@ -233,55 +192,39 @@ void do_test_hypergeometric_quantile(const T& data, const char* type_name, const
          unsigned x = make_unsigned(data[i][3]);
          value_type cp = data[i][5];
          value_type ccp = data[i][6];
-         //
-         // A bit of warning suppression:
-         //
-         (void)x;
-         (void)n;
-         (void)r;
-         (void)N;
-         (void)cp;
-         (void)ccp;
 
-#if !defined(TEST_QUANT) || (TEST_QUANT == 1)
          boost::math::hypergeometric_distribution<value_type,
             policy<discrete_quantile<integer_round_up> > > du(r, n, N);
 
          if((cp < 0.9) && (cp > boost::math::tools::min_value<value_type>()))
          {
-            BOOST_CHECK_EX(quantile(du, cp) >= x);
+            CHECK_EX(quantile(du, cp) >= x);
          }
          if((ccp < 0.9) && (ccp > boost::math::tools::min_value<value_type>()))
          {
-            BOOST_CHECK_EX(quantile(complement(du, ccp)) >= x);
+            CHECK_EX(quantile(complement(du, ccp)) >= x);
          }
-#endif
-#if !defined(TEST_QUANT) || (TEST_QUANT == 2)
          boost::math::hypergeometric_distribution<value_type,
             policy<discrete_quantile<integer_round_down> > > dl(r, n, N);
          if((cp < 0.9) && (cp > boost::math::tools::min_value<value_type>()))
          {
-            BOOST_CHECK_EX(quantile(dl, cp) <= x);
+            CHECK_EX(quantile(dl, cp) <= x);
          }
          if((ccp < 0.9) && (ccp > boost::math::tools::min_value<value_type>()))
          {
-            BOOST_CHECK_EX(quantile(complement(dl, ccp)) <= x);
+            CHECK_EX(quantile(complement(dl, ccp)) <= x);
          }
-#endif
-#if !defined(TEST_QUANT) || (TEST_QUANT == 3)
          boost::math::hypergeometric_distribution<value_type,
             policy<discrete_quantile<integer_round_nearest> > > dn(r, n, N);
 
          if((cp < 0.9) && (cp > boost::math::tools::min_value<value_type>()))
          {
-            BOOST_CHECK_EX(quantile(dn, cp) == x);
+            CHECK_EX(quantile(dn, cp) == x);
          }
          if((ccp < 0.9) && (ccp > boost::math::tools::min_value<value_type>()))
          {
-            BOOST_CHECK_EX(quantile(complement(dn, ccp)) == x);
+            CHECK_EX(quantile(complement(dn, ccp)) == x);
          }
-#endif
-#if !defined(TEST_QUANT) || (TEST_QUANT == 4)
          boost::math::hypergeometric_distribution<value_type,
             policy<discrete_quantile<integer_round_outwards> > > dou(r, n, N);
 
@@ -289,26 +232,24 @@ void do_test_hypergeometric_quantile(const T& data, const char* type_name, const
          {
             if(cp < 0.5)
             {
-               BOOST_CHECK_EX(quantile(dou, cp) <= x);
+               CHECK_EX(quantile(dou, cp) <= x);
             }
             else
             {
-               BOOST_CHECK_EX(quantile(dou, cp) >= x);
+               CHECK_EX(quantile(dou, cp) >= x);
             }
          }
          if((ccp < 0.9) && (ccp > boost::math::tools::min_value<value_type>()))
          {
             if(ccp < 0.5)
             {
-               BOOST_CHECK_EX(quantile(complement(dou, ccp)) >= x);
+               CHECK_EX(quantile(complement(dou, ccp)) >= x);
             }
             else
             {
-               BOOST_CHECK_EX(quantile(complement(dou, ccp)) <= x);
+               CHECK_EX(quantile(complement(dou, ccp)) <= x);
             }
          }
-#endif
-#if !defined(TEST_QUANT) || (TEST_QUANT == 5)
          boost::math::hypergeometric_distribution<value_type,
             policy<discrete_quantile<integer_round_inwards> > > di(r, n, N);
 
@@ -316,25 +257,24 @@ void do_test_hypergeometric_quantile(const T& data, const char* type_name, const
          {
             if(cp < 0.5)
             {
-               BOOST_CHECK_EX(quantile(di, cp) >= x);
+               CHECK_EX(quantile(di, cp) >= x);
             }
             else
             {
-               BOOST_CHECK_EX(quantile(di, cp) <= x);
+               CHECK_EX(quantile(di, cp) <= x);
             }
          }
          if((ccp < 0.9) && (ccp > boost::math::tools::min_value<value_type>()))
          {
             if(ccp < 0.5)
             {
-               BOOST_CHECK_EX(quantile(complement(di, ccp)) <= x);
+               CHECK_EX(quantile(complement(di, ccp)) <= x);
             }
             else
             {
-               BOOST_CHECK_EX(quantile(complement(di, ccp)) >= x);
+               CHECK_EX(quantile(complement(di, ccp)) >= x);
             }
          }
-#endif
       }
    }
 }
@@ -344,29 +284,17 @@ template <class RealType>
 void test_spot(unsigned x, unsigned n, unsigned r, unsigned N,
                RealType p, RealType cp, RealType ccp, RealType tol)
 {
-   //
-   // A bit of warning suppression:
-   //
-   (void)x;
-   (void)n;
-   (void)r;
-   (void)N;
-   (void)p;
-   (void)cp;
-   (void)ccp;
-   (void)tol;
-#if !defined(TEST_QUANT) || (TEST_QUANT == 0)
    boost::math::hypergeometric_distribution<RealType> d(r, n, N);
 
    std::pair<unsigned, unsigned> extent = range(d);
    // CDF's:
-   BOOST_CHECK_CLOSE(pdf(d, x), p, tol);
-   BOOST_CHECK_CLOSE(cdf(d, x), cp, tol);
-   BOOST_CHECK_CLOSE(cdf(complement(d, x)), ccp, tol);
+   CHECK_RELATIVE_ERROR(pdf(d, x), p, tol);
+   CHECK_RELATIVE_ERROR(cdf(d, x), cp, tol);
+   CHECK_RELATIVE_ERROR(cdf(complement(d, x)), ccp, tol);
    // Again with real-value arguments:
-   BOOST_CHECK_CLOSE(pdf(d, static_cast<RealType>(x)), p, tol);
-   BOOST_CHECK_CLOSE(cdf(d, static_cast<RealType>(x)), cp, tol);
-   BOOST_CHECK_CLOSE(cdf(complement(d, static_cast<RealType>(x))), ccp, tol);
+   CHECK_RELATIVE_ERROR(pdf(d, static_cast<RealType>(x)), p, tol);
+   CHECK_RELATIVE_ERROR(cdf(d, static_cast<RealType>(x)), cp, tol);
+   CHECK_RELATIVE_ERROR(cdf(complement(d, static_cast<RealType>(x))), ccp, tol);
    //
    // Quantiles, don't bother checking these for type float
    // as there's not enough precision in the p and q values
@@ -379,46 +307,45 @@ void test_spot(unsigned x, unsigned n, unsigned r, unsigned N,
       boost::math::hypergeometric_distribution<RealType,
          policy<discrete_quantile<integer_round_up> > > du(r, n, N);
 
-      BOOST_CHECK_EX(quantile(du, cp) >= x);
-      BOOST_CHECK_EX(quantile(complement(du, ccp)) >= x);
+      CHECK_EX(quantile(du, cp) >= x);
+      CHECK_EX(quantile(complement(du, ccp)) >= x);
 
       boost::math::hypergeometric_distribution<RealType,
          policy<discrete_quantile<integer_round_down> > > dl(r, n, N);
-      BOOST_CHECK_EX(quantile(dl, cp) <= x);
-      BOOST_CHECK_EX(quantile(complement(dl, ccp)) <= x);
+      CHECK_EX(quantile(dl, cp) <= x);
+      CHECK_EX(quantile(complement(dl, ccp)) <= x);
 
       boost::math::hypergeometric_distribution<RealType,
          policy<discrete_quantile<integer_round_nearest> > > dn(r, n, N);
 
-      BOOST_CHECK_EX(quantile(dn, cp) == x);
-      BOOST_CHECK_EX(quantile(complement(dn, ccp)) == x);
+      CHECK_EX(quantile(dn, cp) == x);
+      CHECK_EX(quantile(complement(dn, ccp)) == x);
    }
    //
    // Error checking of out of bounds arguments:
    //
-   BOOST_MATH_CHECK_THROW(pdf(d, extent.second + 1), std::domain_error);
-   BOOST_MATH_CHECK_THROW(cdf(d, extent.second + 1), std::domain_error);
-   BOOST_MATH_CHECK_THROW(cdf(complement(d, extent.second + 1)), std::domain_error);
+   CHECK_THROW(pdf(d, extent.second + 1), std::domain_error);
+   CHECK_THROW(cdf(d, extent.second + 1), std::domain_error);
+   CHECK_THROW(cdf(complement(d, extent.second + 1)), std::domain_error);
    if(extent.first > 0)
    {
-      BOOST_MATH_CHECK_THROW(pdf(d, extent.first - 1), std::domain_error);
-      BOOST_MATH_CHECK_THROW(cdf(d, extent.first - 1), std::domain_error);
-      BOOST_MATH_CHECK_THROW(cdf(complement(d, extent.first - 1)), std::domain_error);
+      CHECK_THROW(pdf(d, extent.first - 1), std::domain_error);
+      CHECK_THROW(cdf(d, extent.first - 1), std::domain_error);
+      CHECK_THROW(cdf(complement(d, extent.first - 1)), std::domain_error);
    }
-   BOOST_MATH_CHECK_THROW(quantile(d, 1.1f), std::domain_error);
-   BOOST_MATH_CHECK_THROW(quantile(complement(d, 1.1f)), std::domain_error);
-   BOOST_MATH_CHECK_THROW(quantile(d, -0.001f), std::domain_error);
-   BOOST_MATH_CHECK_THROW(quantile(complement(d, -0.001f)), std::domain_error);
+   CHECK_THROW(quantile(d, 1.1f), std::domain_error);
+   CHECK_THROW(quantile(complement(d, 1.1f)), std::domain_error);
+   CHECK_THROW(quantile(d, -0.001f), std::domain_error);
+   CHECK_THROW(quantile(complement(d, -0.001f)), std::domain_error);
    //
    // Checking of extreme values:
    //
-   BOOST_CHECK_EQUAL(quantile(d, 0), extent.first);
-   BOOST_CHECK_EQUAL(quantile(d, 1), extent.second);
-   BOOST_CHECK_EQUAL(quantile(complement(d, 0)), extent.second);
-   BOOST_CHECK_EQUAL(quantile(complement(d, 1)), extent.first);
-   BOOST_CHECK_EQUAL(cdf(d, extent.second), 1);
-   BOOST_CHECK_EQUAL(cdf(complement(d, extent.second)), 0);
-#endif
+   CHECK_EQUAL(quantile(d, 0), RealType(extent.first));
+   CHECK_EQUAL(quantile(d, 1), RealType(extent.second));
+   CHECK_EQUAL(quantile(complement(d, 0)), RealType(extent.second));
+   CHECK_EQUAL(quantile(complement(d, 1)), RealType(extent.first));
+   CHECK_EQUAL(cdf(d, extent.second), RealType(1));
+   CHECK_EQUAL(cdf(complement(d, extent.second)), RealType(0));
 }
 
 template <class RealType>
@@ -427,9 +354,13 @@ void test_spots(RealType /*T*/, const char* type_name)
    // Basic sanity checks.
    // 50 eps as a percentage, up to a maximum of double precision
    // Test data taken from Mathematica 6
+// The tables' SC_ uses BOOST_JOIN, from Boost.Config, which a standalone build doesn't have:
+#ifndef BOOST_JOIN
+#define BOOST_JOIN(X, Y) BOOST_MATH_JOIN(X, Y)
+#endif
 #define T RealType
 #include "hypergeometric_test_data.ipp"
-   do_test_hypergeometric<T>(hypergeometric_test_data, type_name, "Mathematica data");
+   do_test_hypergeometric<T>(hypergeometric_test_data, type_name, "Mathematica data", expected_error<T>(false));
 
 #include "hypergeometric_dist_data2.ipp"
    if(std::is_floating_point<RealType>::value)
@@ -437,7 +368,7 @@ void test_spots(RealType /*T*/, const char* type_name)
       //
       // Don't test this for real_concept: it's too slow!!!
       //
-      do_test_hypergeometric<T>(hypergeometric_dist_data2, type_name, "Random large data");
+      do_test_hypergeometric<T>(hypergeometric_dist_data2, type_name, "Random large data", expected_error<T>(true));
    }
 
    do_test_hypergeometric_quantile<T>(hypergeometric_test_data, type_name, "Mathematica data");
@@ -454,8 +385,8 @@ void test_spots(RealType /*T*/, const char* type_name)
       boost::math::tools::epsilon<RealType>());
    cout<<"Absolute tolerance:"<<tolerance<<endl;
 
-   tolerance *= 50 * 100; // 50eps as a percentage
-   cout << "Tolerance for type " << typeid(RealType).name()  << " is " << tolerance << " %" << endl;
+   tolerance *= 50;
+   cout << "Tolerance for type " << typeid(RealType).name()  << " is " << tolerance << endl;
 
    //
    // These sanity check values were calculated using the online
@@ -472,26 +403,26 @@ void test_spots(RealType /*T*/, const char* type_name)
    test_spot(40, 70, 89, 170, static_cast<T>(0.0721901023798991), static_cast<T>(0.885447799131944), static_cast<T>(1 - 0.885447799131944), tolerance);
 
    boost::math::hypergeometric_distribution<RealType> d(50, 200, 500);
-   BOOST_CHECK_EQUAL(range(d).first, UINT64_C(0));
-   BOOST_CHECK_EQUAL(range(d).second, UINT64_C(50));
-   BOOST_CHECK_CLOSE(mean(d), static_cast<RealType>(20), tolerance);
-   BOOST_CHECK_CLOSE(mode(d), static_cast<RealType>(20), tolerance);
+   CHECK_EQUAL(range(d).first, UINT64_C(0));
+   CHECK_EQUAL(range(d).second, UINT64_C(50));
+   CHECK_RELATIVE_ERROR(mean(d), static_cast<RealType>(20), tolerance);
+   CHECK_RELATIVE_ERROR(mode(d), static_cast<RealType>(20), tolerance);
    // Test values and code revised to correct kurtosis using Mathematica algorithm and test values.
    // Also checked using boost::multiprecision::cpp_bin_float_quad at 128-bit precision.
    // And compared to an implementation of the Wikipedia equation at https://en.wikipedia.org/wiki/Hypergeometric_distribution.
    // https://github.com/boostorg/math/issues/639  hypergeometric kurtosis differs from Wolfram and scipy and Wikipedia.
    // N[variance[hypergeometricdistribution(200,50,500)], 55]
-   BOOST_CHECK_CLOSE(variance(d), static_cast<RealType>(10.82164328657314629258517034068136272545090180360721443L), tolerance);
+   CHECK_RELATIVE_ERROR(variance(d), static_cast<RealType>(10.82164328657314629258517034068136272545090180360721443L), tolerance);
    // N[skewness[hypergeometricdistribution(200,50,500)], 55]
-   BOOST_CHECK_CLOSE(skewness(d), static_cast<RealType>(0.04883307102295208473290291018936563084537649911337978351L), tolerance);
+   CHECK_RELATIVE_ERROR(skewness(d), static_cast<RealType>(0.04883307102295208473290291018936563084537649911337978351L), tolerance);
    // https://www.wolframalpha.com/input/?i=N%5Bkurtosis%5Bhypergeometricdistribution%28200%2C50%2C500%29%5D%2C+55%5D+
    // N[kurtosis[hypergeometricdistribution(200,50,500)], 55] = 2.969174035736058474901169623721804275002985337280263464
-   BOOST_CHECK_CLOSE(kurtosis(d), static_cast<RealType>(2.969174035736058474901169623721804275002985337280263464L), tolerance);
-   BOOST_CHECK_CLOSE(kurtosis(d), kurtosis_excess(d) + 3, tolerance);
-   BOOST_CHECK_EQUAL(quantile(d, 0.5f), median(d));
+   CHECK_RELATIVE_ERROR(kurtosis(d), static_cast<RealType>(2.969174035736058474901169623721804275002985337280263464L), tolerance);
+   CHECK_RELATIVE_ERROR(kurtosis(d), kurtosis_excess(d) + 3, tolerance);
+   CHECK_EQUAL(quantile(d, 0.5f), median(d));
 
-   BOOST_MATH_CHECK_THROW(d = boost::math::hypergeometric_distribution<RealType>(501, 40, 500), std::domain_error);
-   BOOST_MATH_CHECK_THROW(d = boost::math::hypergeometric_distribution<RealType>(40, 501, 500), std::domain_error);
+   CHECK_THROW(d = boost::math::hypergeometric_distribution<RealType>(501, 40, 500), std::domain_error);
+   CHECK_THROW(d = boost::math::hypergeometric_distribution<RealType>(40, 501, 500), std::domain_error);
 
    //
    // Integer x beyond the factorial table, where Loader's saddle-point method is used, with prime
@@ -510,13 +441,13 @@ void test_spots(RealType /*T*/, const char* type_name)
    for (auto const& c : large_cases)
    {
       boost::math::hypergeometric_distribution<RealType> dist(c.r, c.n, c.N);
-      BOOST_CHECK_CLOSE(pdf(dist, c.x), static_cast<RealType>(c.pdf), c.tol);
+      CHECK_RELATIVE_ERROR(pdf(dist, c.x), static_cast<RealType>(c.pdf), c.tol);
    }
    // At an end of the support the result must not underflow before it is complete (true value 1.466e-322).
    if (std::numeric_limits<RealType>::min_exponent10 < -320)
    {
       boost::math::hypergeometric_distribution<RealType> dist(100000, 1065, 200000);
-      BOOST_CHECK(pdf(dist, 0u) > 0);
+      CHECK_TRUE(pdf(dist, 0u) > 0);
    }
 
    //
@@ -537,30 +468,30 @@ void test_spots(RealType /*T*/, const char* type_name)
    {
       boost::math::hypergeometric_distribution<RealType> dist(c.r, c.n, c.N);
       const RealType x = static_cast<RealType>(std::strtold(c.x, nullptr));
-      BOOST_CHECK_CLOSE(pdf(dist, x), static_cast<RealType>(c.pdf), tolerance * static_cast<RealType>(1 + c.cond));
+      CHECK_RELATIVE_ERROR(pdf(dist, x), static_cast<RealType>(c.pdf), tolerance * static_cast<RealType>(1 + c.cond));
    }
    // Integer-valued x of any type takes the exact integer path.
    boost::math::hypergeometric_distribution<RealType> d2(200, 150, 500);
    for (unsigned k = 0; k <= 150; k += 10)
    {
-      BOOST_CHECK_EQUAL(pdf(d2, static_cast<RealType>(k)), pdf(d2, static_cast<std::uint64_t>(k)));
+      CHECK_EQUAL(pdf(d2, static_cast<RealType>(k)), pdf(d2, static_cast<std::uint64_t>(k)));
    }
    // The continuation is log-concave in x, so between integers away from the mode it is monotone.
-   BOOST_CHECK(pdf(d2, static_cast<RealType>(40.5)) > pdf(d2, static_cast<RealType>(40)));
-   BOOST_CHECK(pdf(d2, static_cast<RealType>(40.5)) < pdf(d2, static_cast<RealType>(41)));
-   BOOST_CHECK(pdf(d2, static_cast<RealType>(80.5)) < pdf(d2, static_cast<RealType>(80)));
-   BOOST_CHECK(pdf(d2, static_cast<RealType>(80.5)) > pdf(d2, static_cast<RealType>(81)));
+   CHECK_TRUE(pdf(d2, static_cast<RealType>(40.5)) > pdf(d2, static_cast<RealType>(40)));
+   CHECK_TRUE(pdf(d2, static_cast<RealType>(40.5)) < pdf(d2, static_cast<RealType>(41)));
+   CHECK_TRUE(pdf(d2, static_cast<RealType>(80.5)) < pdf(d2, static_cast<RealType>(80)));
+   CHECK_TRUE(pdf(d2, static_cast<RealType>(80.5)) > pdf(d2, static_cast<RealType>(81)));
    // Counts too large for the type to hold exactly (here N > 2^24 for an unpromoted float): their
    // differences must be formed exactly, or at the bottom of the support (7) a gamma argument hits a pole.
    {
       using no_promote = boost::math::policies::policy<boost::math::policies::promote_float<false>, boost::math::policies::promote_double<false>>;
       boost::math::hypergeometric_distribution<RealType, no_promote> big(30000001 - 3, 10, 30000001);
       const RealType p = pdf(big, static_cast<RealType>(7.5));
-      BOOST_CHECK((boost::math::isfinite)(p) && (p >= 0));
+      CHECK_TRUE((boost::math::isfinite)(p) && (p >= 0));
    }
    // Outside the support is still an error.
-   BOOST_MATH_CHECK_THROW(pdf(d2, static_cast<RealType>(150.5)), std::domain_error);
-   BOOST_MATH_CHECK_THROW(pdf(d2, static_cast<RealType>(-0.5)), std::domain_error);
+   CHECK_THROW(pdf(d2, static_cast<RealType>(150.5)), std::domain_error);
+   CHECK_THROW(pdf(d2, static_cast<RealType>(-0.5)), std::domain_error);
 }
 
 
@@ -572,7 +503,7 @@ void test_entropy(RealType)
    RealType tol = 16 * boost::math::tools::epsilon<RealType>();
    auto check = [&](std::uint64_t a, std::uint64_t b, std::uint64_t c, RealType h)
    {
-      BOOST_CHECK_CLOSE_FRACTION(boost::math::entropy(boost::math::hypergeometric_distribution<RealType>(a, b, c)), h, tol);
+      CHECK_RELATIVE_ERROR(boost::math::entropy(boost::math::hypergeometric_distribution<RealType>(a, b, c)), h, tol);
    };
    check(30, 40, 100, static_cast<RealType>(2.23251995010132138603305010352835455335946637L));
    check(5, 10, 20, static_cast<RealType>(1.41017899258903122865281944730670874143759777L));
@@ -580,12 +511,11 @@ void test_entropy(RealType)
    check(10, 1000, 1000000, static_cast<RealType>(0.0560825642231663484256230658066717444208256013L));
    check(300000, 400000, 1000000, static_cast<RealType>(6.83281224965225896648567487522138918484639344L));
    check(250000000, 333333333, 1000000000, static_cast<RealType>(10.1915445366983499530007834277413067488348034L));
-   BOOST_CHECK_EQUAL(boost::math::entropy(boost::math::hypergeometric_distribution<RealType>(5, 5, 5)), RealType(0));
+   CHECK_EQUAL(boost::math::entropy(boost::math::hypergeometric_distribution<RealType>(5, 5, 5)), RealType(0));
 }
 
-BOOST_AUTO_TEST_CASE( test_main )
+int main()
 {
-   expected_results();
    // Basic sanity-check spot values.
    // (Parameter value, arbitrarily zero, only communicates the floating point type).
    test_spots(0.0F, "float"); // Test float. OK at decdigits = 0 tolerance = 0.0001 %
@@ -606,6 +536,6 @@ BOOST_AUTO_TEST_CASE( test_main )
       "to pass.</note>" << std::endl;
 #endif
 
-
-} // BOOST_AUTO_TEST_CASE( test_main )
+   return boost::math::test::report_errors();
+}
 
