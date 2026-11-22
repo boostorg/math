@@ -24,6 +24,7 @@
 
 #include <boost/math/special_functions/hypergeometric_pFq.hpp>
 #include <boost/math/special_functions/relative_difference.hpp>
+#include <vector>
 
 #ifdef _MSC_VER
 #pragma warning(disable:4127)
@@ -361,6 +362,27 @@ void test_special_cases(T, const char*)
     }
 }
 
+// Issue #1643: more than BOOST_MATH_PFQ_MAX_B_TERMS b terms is a domain error. When the policy
+// doesn't throw, the series must return NaN rather than overrun its fixed size crossover buffer.
+template <class T>
+void test_too_many_b_terms(T, const char*)
+{
+   using nothrow_policy = boost::math::policies::policy<boost::math::policies::domain_error<boost::math::policies::ignore_error>, boost::math::policies::evaluation_error<boost::math::policies::ignore_error>>;
+
+   const std::vector<T> a {T(1)};
+   std::vector<T> b {};
+   for (auto i {1}; i <= BOOST_MATH_PFQ_MAX_B_TERMS + 1; ++i)
+   {
+      b.push_back(T(i));
+   }
+
+   BOOST_CHECK_THROW(boost::math::hypergeometric_pFq(a, b, T(0.5)), std::domain_error);
+   BOOST_MATH_IF_CONSTEXPR(std::numeric_limits<T>::has_quiet_NaN)
+   {
+      BOOST_CHECK((boost::math::isnan)(boost::math::hypergeometric_pFq(a, b, T(0.5), static_cast<T*>(nullptr), nothrow_policy())));
+   }
+}
+
 template <class T>
 void test_spots(T z, const char* type_name)
 {
@@ -374,4 +396,5 @@ void test_spots(T z, const char* type_name)
    test_spots_2F1(z, type_name);
    test_cancellation_2F1(z, type_name);
    test_special_cases(z, type_name);
+   test_too_many_b_terms(z, type_name);
 }
