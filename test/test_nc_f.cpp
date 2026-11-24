@@ -393,6 +393,30 @@ void test_spots(RealType, const char* name = nullptr)
       BOOST_CHECK_CLOSE(ref.find_v1(boost::math::complement(x, v2, nc, 1-P)), v1, tolerance);
    }
 
+   // gh-1669 reported failures for the degrees of freedom finders for small values of v1 and v2.
+   {
+      RealType v1 = RealType(0.1);
+      RealType v2 = 2;
+      nc = RealType(0.25);
+      x = 15;
+      boost::math::non_central_f_distribution<RealType> ref(v1, v2, nc);
+      RealType P = cdf(ref, x);
+      RealType Q = cdf(complement(ref, x));
+      BOOST_CHECK_CLOSE(ref.find_v1(x, v2, nc, P), v1, tolerance);
+      BOOST_CHECK_CLOSE(ref.find_v1(boost::math::complement(x, v2, nc, Q)), v1, tolerance);
+   }
+   {
+      RealType v1 = 2;
+      RealType v2 = 1;
+      nc = RealType(0.25);
+      x = 15;
+      boost::math::non_central_f_distribution<RealType> ref(v1, v2, nc);
+      RealType P = cdf(ref, x);
+      RealType Q = cdf(complement(ref, x));
+      BOOST_CHECK_CLOSE(ref.find_v2(x, v1, nc, P), v2, tolerance);
+      BOOST_CHECK_CLOSE(ref.find_v2(boost::math::complement(x, v1, nc, Q)), v2, tolerance);
+   }
+
    // https://github.com/boostorg/math/issues/1491: the cdf is monotonic in v2 here, but at huge v2
    // it used to come out negative, so find_v2 reported two roots.
    {

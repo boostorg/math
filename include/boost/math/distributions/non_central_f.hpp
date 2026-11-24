@@ -198,7 +198,7 @@ BOOST_MATH_NAMESPACE_BEGIN
             //
             RealType guess = 1;
             std::pair<RealType, RealType> ir = tools::bracket_and_solve_root(
-               f, guess, RealType(2), f(guess) < 0 ? true : false, tol, max_iter, pol);
+               f, guess, RealType(2), large_difference > 0, tol, max_iter, pol);
             RealType result = ir.first + (ir.second - ir.first) / 2;
             if(max_iter >= policies::get_max_root_iterations<Policy>())
             {
