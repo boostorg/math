@@ -620,6 +620,32 @@ BOOST_AUTO_TEST_CASE( test_main )
   
 } // BOOST_AUTO_TEST_CASE( test_main )
 
+BOOST_AUTO_TEST_CASE( test_complement_quantile_df2_2 )
+{
+   using namespace boost::math;
+   using no_promotion = policies::policy<
+      policies::promote_float<false>,
+      policies::promote_double<false>>;
+   const fisher_f_distribution<double, no_promotion> dist(2.0, 2.0);
+   const double tol = std::numeric_limits<double>::epsilon() * 16;
+
+   // For df1 = 2, df2 = 2, SF(x) = 1 / (1 + x), so quantile(complement(dist, q)) = 1 / q - 1.
+   for (double q : {1e-7, 1e-10, 1e-15, 3.85e-16, 1e-20, 1e-100, 1e-300})
+   {
+      const double expected = (1.0 - q) / q;
+      BOOST_CHECK_CLOSE_FRACTION(quantile(complement(dist, q)), expected, tol);
+   }
+
+   // Direct check on ibetac_inv(1, 1, q, &y) complement output y == q.
+   for (double q : {1e-7, 1e-15, 3.85e-16, 1e-20, 1e-300})
+   {
+      double y = 0.0;
+      const double x = ibetac_inv(1.0, 1.0, q, &y, no_promotion());
+      BOOST_CHECK_EQUAL(x, 1.0 - q);
+      BOOST_CHECK_EQUAL(y, q);
+   }
+}
+
 /*
 
 Output is:
