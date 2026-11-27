@@ -40,9 +40,13 @@ than the one shown will have __zero_error.
 [table_digamma]
 
 As shown above, error rates for positive arguments are generally very low.
-For negative arguments there are an infinite number of irrational roots:
-relative errors very close to these can be arbitrarily large, although
-absolute error will remain very low.
+For negative arguments there are an infinite number of irrational roots, one
+between each pair of poles, and close to each of them the two terms of the
+reflection formula cancel.  For `float` and `double` the function is evaluated
+in double-word arithmetic there, so these types keep their accuracy right up to
+the roots.  For wider types, and in code compiled for a GPU, relative errors very
+close to the roots can be arbitrarily large, although absolute error will remain
+very low.
 
 The following error plot are based on an exhaustive search of the functions domain, MSVC-15.5 at `double` precision, 
 and GCC-7.1/Ubuntu for `long double` and `__float128`.
@@ -68,7 +72,17 @@ For Negative arguments the reflection formula:
 
    digamma(1-x) = digamma(x) + pi/tan(pi*x);
    
-is used to make /x/ positive.
+is used to make /x/ positive.  The argument of the tangent is reduced from /x/
+itself, since 1-x need not be exactly representable.
+
+Close to a root at negative /x/ the two terms of the reflection formula cancel,
+and what is left is mostly their rounding error.  When the result is small
+beside its largest term (less than half of it for a `double`, and less than 1/32 of
+it for a `float` that is evaluated as a `double`), `float` and `double` arguments are
+evaluated again in double-word arithmetic: the cotangent from the Maclaurin
+series of the sine and cosine, and digamma(1-x) from its asymptotic series and a
+logarithm, after shifting the argument up by recurrence.  Only as many terms are
+taken in double-word arithmetic as the amount of cancellation calls for.
 
 For arguments in the range [0,1] the recurrence relation:
 
