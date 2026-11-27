@@ -30,6 +30,12 @@
 #include <boost/math/tools/big_constant.hpp>
 #endif
 
+#ifndef BOOST_MATH_HAS_GPU_SUPPORT
+#include <boost/math/tools/compensated_arithmetic.hpp>
+#include <boost/math/tools/numeric_limits.hpp>
+#include <boost/math/tools/precision.hpp>
+#endif
+
 #if defined(__GNUC__) && defined(BOOST_MATH_USE_FLOAT128)
 //
 // This is the only way we can avoid
@@ -418,6 +424,263 @@ BOOST_MATH_GPU_ENABLED inline T digamma_imp_1_2(T x, const BOOST_MATH_NAMESPACE:
    return result;
 }
 
+#ifndef BOOST_MATH_HAS_GPU_SUPPORT
+//
+// digamma at negative x in double-word arithmetic.  Near each of its zeros there, one between every pair of
+// poles, digamma(1 - x) and the cotangent of the reflection cancel, and only their rounding errors are left.
+//
+template <class T>
+class digamma_double_word
+{
+public:
+   using arithmetic = double_word_arithmetic<T>;
+   using word = double_word<T>;
+
+   digamma_double_word()
+   {
+      BOOST_MATH_STD_USING
+      // Relative to the largest: a term below drop is left out, and one below sloppy needs only working precision.
+      roundoff = ldexp(T(1), -tools::digits<T>());
+      full = roundoff / 256;
+      const T sloppy {full};
+      const T drop {sloppy * roundoff};
+      const word one {T(1), T(0)};
+      // pi - hi = sin(hi), for hi = pi rounded
+      pi = word{constants::pi<T>(), sin(constants::pi<T>())};
+      // (-1)^k / (2k)! and (-1)^k / (2k + 1)!, for arguments up to pi / 4
+      word factorial {one};
+      T bound {1};
+      for (unsigned k {0}; (bound > drop) && (k < capacity); ++k)
+      {
+         if (k > 0)
+         {
+            const T step {static_cast<T>((2 * k - 1) * (2 * k))};
+            factorial = arithmetic::negate(a.divide(factorial, step));
+            bound *= T(0.62) / step;
+         }
+         push(cosine_series, factorial);
+         push(sine_series, a.divide(factorial, static_cast<T>(2 * k + 1)));
+      }
+      // 1 / (2k + 1), for squared arguments up to (sqrt(2) - 1)^2 / (sqrt(2) + 1)^2
+      bound = 1;
+      for (unsigned k {0}; (bound > drop) && (k < capacity); ++k, bound *= T(0.0295))
+      {
+         push(atanh_series, a.divide(one, static_cast<T>(2 * k + 1)));
+      }
+      // log(2) = 7 log(16 / 15) + 5 log(25 / 24) + 3 log(81 / 80)
+      ln2 = a.add(a.add(a.multiply(log_ratio(T(31), sloppy, drop), T(7)), a.multiply(log_ratio(T(49), sloppy, drop), T(5))),
+                  a.multiply(log_ratio(T(161), sloppy, drop), T(3)));
+      // B_2n / (2n) for n = 1 to 17: the last that are ratios of integers exact in a double.
+      constexpr double numerators[] { 1, -1, 1, -1, 1, -691, 1, -3617, 43867, -174611, 77683, -236364091, 657931, -3392780147.0, 1723168255201.0, -7709321041217.0, 151628697551.0 };
+      constexpr double denominators[] { 12, 120, 252, 240, 132, 32760, 12, 8160, 14364, 6600, 276, 65520, 12, 3480, 85932, 16320, 12 };
+      for (unsigned n {0}; n < 17; ++n)
+      {
+         const T hi {static_cast<T>(numerators[n])};
+         const word numerator {hi, static_cast<T>(numerators[n] - static_cast<double>(hi))};
+         push(bernoulli_series, a.divide(numerator, static_cast<T>(denominators[n])));
+      }
+      // The first term left out of that series at w: B_36 / (36 w^36)
+      for (unsigned w {1}; w < truncations; ++w)
+      {
+         truncation[w] = T(380879311253.0) * pow(static_cast<T>(w), T(-36));
+      }
+   }
+
+   // digamma(x) for x < 0, not an integer, where the result is smaller than its largest term by the factor cancellation.
+   T operator()(const T& x, const T& cancellation) const
+   {
+      // No more of the terms are taken in double words than the cancellation calls for.
+      const T wanted {1 / (4096 * cancellation)};
+      const T sloppy {wanted > full ? wanted : full};
+      const T drop {sloppy * roundoff};
+      const auto result {a.add(positive(arithmetic::two_sum(T(1), T(-x)), sloppy, drop), reflection(x, sloppy, drop))};
+      return result.hi + result.lo;
+   }
+
+private:
+   enum { capacity = 32, truncations = 40 };
+
+   // The coefficients of a power series, and their sizes relative to the first.
+   struct series
+   {
+      word coefficients[capacity];
+      T sizes[capacity];
+      unsigned size = 0;
+   };
+
+   static void push(series& s, const word& coefficient)
+   {
+      BOOST_MATH_STD_USING
+      s.coefficients[s.size] = coefficient;
+      s.sizes[s.size] = fabs(coefficient.hi / s.coefficients[0].hi);
+      ++s.size;
+   }
+
+   // Horner's rule: in working precision for the terms too small to need more, then in double words.
+   word evaluate(const series& s, const word& z, const T& sloppy, const T& drop) const
+   {
+      BOOST_MATH_STD_USING
+      const T size_of_z {fabs(z.hi)};
+      unsigned split {s.size};
+      unsigned size {s.size};
+      T power {1};
+      for (unsigned k {1}; k < s.size; ++k)
+      {
+         power *= size_of_z;
+         const T bound {power * s.sizes[k]};
+         if ((bound < sloppy) && (split == s.size))
+         {
+            split = k;
+         }
+         if (bound < drop)
+         {
+            size = k;
+            break;
+         }
+      }
+      unsigned k {size - 1};
+      word result {s.coefficients[k]};
+      if (k >= split)
+      {
+         T tail {result.hi};
+         while (k > split)
+         {
+            --k;
+            tail = tail * z.hi + s.coefficients[k].hi;
+         }
+         result = word{tail, T(0)};
+      }
+      while (k > 0)
+      {
+         --k;
+         result = a.add(a.multiply(result, z), s.coefficients[k]);
+      }
+      return result;
+   }
+
+   // 2 atanh(s) = log((1 + s) / (1 - s))
+   word twice_atanh(const word& s, const T& sloppy, const T& drop) const
+   {
+      const auto half {a.multiply(s, evaluate(atanh_series, a.multiply(s, s), sloppy, drop))};
+      return word{2 * half.hi, 2 * half.lo};
+   }
+
+   // log((m + 1) / m) = 2 atanh(1 / (2m + 1)), given odd = 2m + 1.
+   word log_ratio(const T& odd, const T& sloppy, const T& drop) const
+   {
+      return twice_atanh(a.divide(word{T(1), T(0)}, odd), sloppy, drop);
+   }
+
+   // log(v) = e log(2) + 2 atanh((m - 1) / (m + 1)), with v = m 2^e and m in [1 / sqrt(2), sqrt(2)).
+   word log_of(const word& v, const T& sloppy, const T& drop) const
+   {
+      BOOST_MATH_STD_USING
+      int e {};
+      T hi {frexp(v.hi, &e)};
+      if (hi < T(0.70710678118654752440L))
+      {
+         hi *= 2;
+         --e;
+      }
+      // hi / v.hi is the power of two that scales v to m
+      const word m {hi, v.lo * (hi / v.hi)};
+      return a.add(twice_atanh(a.divide(a.add(m, T(-1)), a.add(m, T(1))), sloppy, drop), a.multiply(ln2, static_cast<T>(e)));
+   }
+
+   // pi cot(pi (1 - x)) = -pi cot(pi d), where d = x less the nearest integer is exact.
+   word reflection(const T& x, const T& sloppy, const T& drop) const
+   {
+      BOOST_MATH_STD_USING
+      T d {x};
+      if (x <= T(-0.5))
+      {
+         d = x - floor(x);
+         if (d > T(0.5))
+         {
+            d -= 1;
+         }
+      }
+      // cot(pi r) = tan(pi (1/2 - r)) keeps the argument of the series within pi / 4
+      const T r {fabs(d)};
+      const bool complement {r > T(0.25)};
+      const auto t {a.multiply(pi, complement ? T(T(0.5) - r) : r)};
+      const auto t2 {a.multiply(t, t)};
+      const auto s {a.multiply(t, evaluate(sine_series, t2, sloppy, drop))};
+      const auto c {evaluate(cosine_series, t2, sloppy, drop)};
+      const auto result {a.multiply(complement ? a.divide(s, c) : a.divide(c, s), pi)};
+      return d < 0 ? result : arithmetic::negate(result);
+   }
+
+   // digamma(w) for w >= 1: shifted up to where the asymptotic series is good to drop.
+   word positive(word w, const T& sloppy, const T& drop) const
+   {
+      unsigned limit {2};
+      while ((truncation[limit] > drop) && (limit < truncations - 1))
+      {
+         ++limit;
+      }
+      word shift {T(0), T(0)};
+      while (w.hi < static_cast<T>(limit))
+      {
+         shift = a.add(shift, reciprocal(w));
+         w = a.add(w, T(1));
+      }
+      // log(w) - 1 / (2w) - sum B_2n / (2n w^2n)
+      const auto r {reciprocal(w)};
+      const auto z {a.multiply(r, r)};
+      const auto tail {a.add(a.multiply(evaluate(bernoulli_series, z, sloppy, drop), z), word{r.hi / 2, r.lo / 2})};
+      return a.add(a.add(log_of(w, sloppy, drop), arithmetic::negate(tail)), arithmetic::negate(shift));
+   }
+
+   // 1 / w from one division: with q = fl(1 / w.hi), 1 / w = q + q (1 - w q) to double-word precision.
+   word reciprocal(const word& w) const
+   {
+      const T q {1 / w.hi};
+      const auto residual {a.add(a.multiply(w, T(-q)), T(1))};
+      return arithmetic::fast_two_sum(q, residual.hi * q);
+   }
+
+   arithmetic a;
+   T roundoff;
+   T full;
+   word pi;
+   word ln2;
+   T truncation[truncations];
+   series sine_series;
+   series cosine_series;
+   series atanh_series;
+   series bernoulli_series;
+};
+
+template <class T>
+inline T digamma_by_double_word(const T& x, const T& cancellation)
+{
+   static const digamma_double_word<T> evaluator;
+   return evaluator(x, cancellation);
+}
+
+// Binary types up to double: the series above reach 64 bits, but a long double's fma is in software and far too slow.
+template <class T>
+struct digamma_has_double_word : public BOOST_MATH_NAMESPACE::integral_constant<bool,
+   BOOST_MATH_NAMESPACE::numeric_limits<T>::is_specialized && (BOOST_MATH_NAMESPACE::numeric_limits<T>::radix == 2) && (BOOST_MATH_NAMESPACE::numeric_limits<T>::digits <= 53)> {};
+
+// Recomputes a result at x < 0 that is small beside largest, the largest of the terms that were added to give it.
+template <class T, class Tag>
+inline T digamma_cancellation(const T& x, const T& result, const T& largest, const Tag*, const BOOST_MATH_NAMESPACE::true_type&)
+{
+   BOOST_MATH_STD_USING
+   // An evaluation type wider than the result has bits to lose
+   const T limit {(tools::digits<T>() > Tag::value) ? T(32) : T(2)};
+   return (fabs(result) * limit < largest) ? digamma_by_double_word(x, T(largest / fabs(result))) : result;
+}
+
+template <class T, class Tag>
+inline T digamma_cancellation(const T&, const T& result, const T&, const Tag*, const BOOST_MATH_NAMESPACE::false_type&)
+{
+   return result;
+}
+#endif // BOOST_MATH_HAS_GPU_SUPPORT
+
 template <class T, class Tag, class Policy>
 BOOST_MATH_GPU_ENABLED T digamma_imp(T x, const Tag* t, const Policy& pol)
 {
@@ -428,6 +691,9 @@ BOOST_MATH_GPU_ENABLED T digamma_imp(T x, const Tag* t, const Policy& pol)
    BOOST_MATH_STD_USING // ADL of std functions.
 
    T result = 0;
+#ifndef BOOST_MATH_HAS_GPU_SUPPORT
+   const T original {x};
+#endif
    //
    // Check for negative arguments and use reflection:
    //
@@ -444,23 +710,26 @@ BOOST_MATH_GPU_ENABLED T digamma_imp(T x, const Tag* t, const Policy& pol)
       }
       // Reflect:
       x = 1 - x;
-      // The cotangent is zero at the half integers:
-      if(remainder != T(0.5))
+      if(remainder < T(0.25))
       {
-         // Fractional part of 1 - x, shifted to negative if > 0.5:
-         if(remainder < T(0.5))
-         {
-            remainder = -remainder;
-         }
-         else
-         {
-            remainder = 1 - remainder;
-         }
-         result = constants::pi<T>() / tan(constants::pi<T>() * remainder);
+         // pi cot(pi (1 - x)) = -pi cot(pi remainder)
+         result = -constants::pi<T>() / tan(constants::pi<T>() * remainder);
+      }
+      else if(remainder > T(0.75))
+      {
+         result = constants::pi<T>() / tan(constants::pi<T>() * (1 - remainder));
+      }
+      else
+      {
+         // tan loses digits near pi / 2, so here cot(pi remainder) = tan(pi (1/2 - remainder)), whose argument is exact
+         result = -constants::pi<T>() * tan(constants::pi<T>() * (T(0.5) - remainder));
       }
    }
    if(x == 0)
       return policies::raise_pole_error<T>("boost::math::digamma<%1%>(%1%)", nullptr, x, pol);
+#ifndef BOOST_MATH_HAS_GPU_SUPPORT
+   const T reflection {result};
+#endif
    //
    // If we're above the lower-limit for the
    // asymptotic expansion then use it:
@@ -491,6 +760,14 @@ BOOST_MATH_GPU_ENABLED T digamma_imp(T x, const Tag* t, const Policy& pol)
       }
       result += digamma_imp_1_2(x, t);
    }
+#ifndef BOOST_MATH_HAS_GPU_SUPPORT
+   if(original < 0)
+   {
+      // The largest term at negative x: the cotangent where x was reflected, 1 / x where it was not.
+      const T largest {fabs(original <= -1 ? reflection : T(1 / original))};
+      result = digamma_cancellation(original, result, largest, t, digamma_has_double_word<T>());
+   }
+#endif
    return result;
 }
 
@@ -526,19 +803,19 @@ T digamma_imp(T x, const BOOST_MATH_NAMESPACE::integral_constant<int, 0>* t, con
       }
       // Reflect:
       x = 1 - x;
-      // The cotangent is zero at the half integers:
-      if(remainder != T(0.5))
+      if(remainder < T(0.25))
       {
-         // Fractional part of 1 - x, shifted to negative if > 0.5:
-         if(remainder < T(0.5))
-         {
-            remainder = -remainder;
-         }
-         else
-         {
-            remainder = 1 - remainder;
-         }
-         result = constants::pi<T>() / tan(constants::pi<T>() * remainder);
+         // pi cot(pi (1 - x)) = -pi cot(pi remainder)
+         result = -constants::pi<T>() / tan(constants::pi<T>() * remainder);
+      }
+      else if(remainder > T(0.75))
+      {
+         result = constants::pi<T>() / tan(constants::pi<T>() * (1 - remainder));
+      }
+      else
+      {
+         // tan loses digits near pi / 2, so here cot(pi remainder) = tan(pi (1/2 - remainder)), whose argument is exact
+         result = -constants::pi<T>() * tan(constants::pi<T>() * (T(0.5) - remainder));
       }
    }
    if(x == 0)
