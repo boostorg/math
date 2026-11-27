@@ -433,23 +433,31 @@ BOOST_MATH_GPU_ENABLED T digamma_imp(T x, const Tag* t, const Policy& pol)
    //
    if(x <= -1)
    {
-      // Reflect:
-      x = 1 - x;
-      // Argument reduction for tan:
+      // Argument reduction for tan uses x itself: 1 - x is not always exact, x - floor(x) is.
       T remainder = x - floor(x);
-      // Shift to negative if > 0.5:
-      if(remainder > T(0.5))
-      {
-         remainder -= 1;
-      }
       //
       // check for evaluation at a negative pole:
       //
       if(remainder == 0)
       {
-         return policies::raise_pole_error<T>("boost::math::digamma<%1%>(%1%)", nullptr, (1-x), pol);
+         return policies::raise_pole_error<T>("boost::math::digamma<%1%>(%1%)", nullptr, x, pol);
       }
-      result = constants::pi<T>() / tan(constants::pi<T>() * remainder);
+      // Reflect:
+      x = 1 - x;
+      // The cotangent is zero at the half integers:
+      if(remainder != T(0.5))
+      {
+         // Fractional part of 1 - x, shifted to negative if > 0.5:
+         if(remainder < T(0.5))
+         {
+            remainder = -remainder;
+         }
+         else
+         {
+            remainder = 1 - remainder;
+         }
+         result = constants::pi<T>() / tan(constants::pi<T>() * remainder);
+      }
    }
    if(x == 0)
       return policies::raise_pole_error<T>("boost::math::digamma<%1%>(%1%)", nullptr, x, pol);
@@ -507,23 +515,31 @@ T digamma_imp(T x, const BOOST_MATH_NAMESPACE::integral_constant<int, 0>* t, con
    //
    if(x <= -1)
    {
-      // Reflect:
-      x = 1 - x;
-      // Argument reduction for tan:
+      // Argument reduction for tan uses x itself: 1 - x is not always exact, x - floor(x) is.
       T remainder = x - floor(x);
-      // Shift to negative if > 0.5:
-      if(remainder > T(0.5))
-      {
-         remainder -= 1;
-      }
       //
       // check for evaluation at a negative pole:
       //
       if(remainder == 0)
       {
-         return policies::raise_pole_error<T>("boost::math::digamma<%1%>(%1%)", nullptr, (1 - x), pol);
+         return policies::raise_pole_error<T>("boost::math::digamma<%1%>(%1%)", nullptr, x, pol);
       }
-      result = constants::pi<T>() / tan(constants::pi<T>() * remainder);
+      // Reflect:
+      x = 1 - x;
+      // The cotangent is zero at the half integers:
+      if(remainder != T(0.5))
+      {
+         // Fractional part of 1 - x, shifted to negative if > 0.5:
+         if(remainder < T(0.5))
+         {
+            remainder = -remainder;
+         }
+         else
+         {
+            remainder = 1 - remainder;
+         }
+         result = constants::pi<T>() / tan(constants::pi<T>() * remainder);
+      }
    }
    if(x == 0)
       return policies::raise_pole_error<T>("boost::math::digamma<%1%>(%1%)", nullptr, x, pol);
@@ -546,13 +562,15 @@ T digamma_imp(T x, const BOOST_MATH_NAMESPACE::integral_constant<int, 0>* t, con
       // Special case for integer arguments, see
       // http://functions.wolfram.com/06.14.03.0001.01
       //
-      result = -constants::euler<T, Policy>();
+      // Summed apart from any reflection term: x is also an integer when 1 - x has rounded to one.
+      T sum {-constants::euler<T, Policy>()};
       T val = 1;
       while(val < x)
       {
-         result += 1 / val;
+         sum += 1 / val;
          val += 1;
       }
+      result += sum;
    }
    else if(floor(two_x) == two_x)
    {
@@ -560,15 +578,16 @@ T digamma_imp(T x, const BOOST_MATH_NAMESPACE::integral_constant<int, 0>* t, con
       // Special case for half integer arguments, see:
       // http://functions.wolfram.com/06.14.03.0007.01
       //
-      result = -2 * constants::ln_two<T, Policy>() - constants::euler<T, Policy>();
+      T sum {-2 * constants::ln_two<T, Policy>() - constants::euler<T, Policy>()};
       int n = itrunc(x);
       if(n)
       {
          for(int k = 1; k < n; ++k)
-            result += 1 / T(k);
+            sum += 1 / T(k);
          for(int k = n; k <= 2 * n - 1; ++k)
-            result += 2 / T(k);
+            sum += 2 / T(k);
       }
+      result += sum;
    }
    else
    {
