@@ -620,6 +620,29 @@ BOOST_AUTO_TEST_CASE( test_main )
   
 } // BOOST_AUTO_TEST_CASE( test_main )
 
+BOOST_AUTO_TEST_CASE(test_complement_quantile_subnormal_beta_tail)
+{
+   using namespace boost::math;
+   using no_promotion = policies::policy<policies::promote_float<false>,
+      policies::promote_double<false>, policies::max_root_iterations<400>,
+      policies::overflow_error<policies::ignore_error>>;
+   const fisher_f_distribution<double, no_promotion> dist(1, 0.1);
+
+   // Reference from inverting the incomplete beta at 100-digit precision.
+   BOOST_CHECK_CLOSE_FRACTION(quantile(complement(dist, 3.85e-16)), 5.272596610651114e306, 1e-12);
+}
+
+BOOST_AUTO_TEST_CASE(test_complement_quantile_overflowing_beta_tail)
+{
+   using namespace boost::math;
+   using no_promotion = policies::policy<policies::promote_float<false>,
+      policies::promote_double<false>, policies::max_root_iterations<400>,
+      policies::overflow_error<policies::ignore_error>>;
+   const fisher_f_distribution<double, no_promotion> dist(1, 0.1);
+
+   BOOST_CHECK_EQUAL(quantile(complement(dist, 1e-20)), std::numeric_limits<double>::infinity());
+}
+
 /*
 
 Output is:
