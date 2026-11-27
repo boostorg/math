@@ -13,9 +13,11 @@
 #include <benchmark/benchmark.h>
 #include <boost/math/constants/constants.hpp>
 #include <boost/math/differentiation/autodiff.hpp>
+#include <boost/math/differentiation/autodiff_reverse.hpp>
 #include <boost/math/tools/random_vector.hpp>
 #include <boost/math/tools/rational.hpp>
 
+namespace rdiff = boost::math::differentiation::reverse_mode;
 using boost::math::constants::one_div_root_two;
 using boost::math::differentiation::make_ftuple;
 using boost::math::differentiation::make_fvar;
@@ -130,6 +132,41 @@ void run_at_order(benchmark::State& state, F f, std::index_sequence<Orders...>)
     ((order == Orders + 1 ? f(std::integral_constant<std::size_t, Orders + 1>()) : void()), ...);
 }
 
+// Reverse mode: records f(x) on the tape, then sweeps it back for the gradient (Order 1) or the
+// Hessian (Order 2) in every input. The inputs are recorded once; each iteration rewinds to them.
+template<std::size_t Order, class F>
+void run_reverse(benchmark::State& state, const std::vector<double>& inputs, F f)
+{
+    using rvar = rdiff::rvar<double, Order>;
+    // An order 2 tape holds leaves of the order 1 tape, so the order 1 tape is cleared last.
+    auto& tape = rdiff::get_active_tape<double, Order>();
+    auto& first_order_tape = rdiff::get_active_tape<double, 1>();
+    tape.clear();
+    first_order_tape.clear();
+    std::vector<rvar> x(inputs.begin(), inputs.end());
+    std::vector<rvar*> xs;
+    for (auto& xi : x)
+    {
+        xs.push_back(&xi);
+    }
+    tape.add_checkpoint();
+    first_order_tape.add_checkpoint();
+    for (auto _ : state)
+    {
+        tape.rewind_to_last_checkpoint();
+        first_order_tape.rewind_to_last_checkpoint();
+        rvar y = f(x);
+        if constexpr (Order == 1)
+        {
+            benchmark::DoNotOptimize(rdiff::grad(y, xs));
+        }
+        else
+        {
+            benchmark::DoNotOptimize(rdiff::hess(y, xs));
+        }
+    }
+}
+
 void Horner(benchmark::State& state)
 {
     const auto c = generate_random_uniform_vector<double>(64, 12345, -1, 1);
@@ -192,10 +229,13 @@ void BlackScholesFourVariables(benchmark::State& state)
     run_at_order(state, f, std::make_index_sequence<4>());
 }
 
-// 16 species: a solvent, alternating cations and anions, and a neutral solute.
+// A solvent, alternating cations and anions, and a neutral solute. ReverseOrder 0 runs fvar at every
+// order on 16 species; 1 and 2 take the reverse mode gradient and Hessian in P on state.range(0)
+// species, which records n^2 nodes.
+template<std::size_t ReverseOrder = 0>
 void MseGibbsEnergy(benchmark::State& state)
 {
-    constexpr std::size_t n = 16;
+    const std::size_t n = ReverseOrder == 0 ? 16 : static_cast<std::size_t>(state.range(0));
     std::vector<double> x(n, 0.2 / (n - 1));
     std::vector<double> z(n, 0.0);
     x[0] = 0.8;
@@ -205,16 +245,88 @@ void MseGibbsEnergy(benchmark::State& state)
     }
     const auto b0 = generate_random_uniform_vector<double>(n * n, 12345, -0.5, 0.5);
     const auto b1 = generate_random_uniform_vector<double>(n * n, 12345, -5e-4, 5e-4);
-    run_at_order(state, 0.1, [&](const auto& P) { return mse_gibbs_energy(P, x, z, b0, b1); });
+    const auto f = [&](const auto& P) { return mse_gibbs_energy(P, x, z, b0, b1); };
+    if constexpr (ReverseOrder == 0)
+    {
+        run_at_order(state, 0.1, f);
+    }
+    else
+    {
+        run_reverse<ReverseOrder>(state, {0.1}, [&](const auto& v) { return f(v[0]); });
+    }
+}
+
+// A polynomial of degree state.range(0) - 1: the tape grows linearly in the degree.
+void HornerReverse(benchmark::State& state)
+{
+    const auto c = generate_random_uniform_vector<double>(static_cast<std::size_t>(state.range(0)), 12345, -1, 1);
+    run_reverse<1>(state, {0.5}, [&](const auto& x) { return evaluate_polynomial(c.data(), x[0], c.size()); });
+}
+
+void TranscendentalReverse(benchmark::State& state)
+{
+    run_reverse<1>(state, {2.5}, [](const auto& x) { return transcendental(x[0]); });
+}
+
+void InverseFunctionsReverse(benchmark::State& state)
+{
+    run_reverse<1>(state, {0.5}, [](const auto& x) { return inverse_functions(x[0]); });
+}
+
+void TwoVariablesReverse(benchmark::State& state)
+{
+    run_reverse<1>(state, {1.3, 0.7}, [](const auto& x) { return two_variables(x[0], x[1]); });
+}
+
+void ThreeVariablesReverse(benchmark::State& state)
+{
+    run_reverse<1>(state, {1.3, 0.7, 2.1}, [](const auto& x) { return three_variables(x[0], x[1], x[2]); });
+}
+
+// The extended Rosenbrock function of n = state.range(0) variables: one sweep gives all n partials,
+// so the gradient is O(n); the Hessian sweeps once per variable, O(n^2).
+template<class Real>
+Real rosenbrock(const std::vector<Real>& x)
+{
+    Real f = 0.0;
+    for (std::size_t i = 0; i + 1 < x.size(); ++i)
+    {
+        f += 100.0 * (x[i + 1] - x[i] * x[i]) * (x[i + 1] - x[i] * x[i]) + (1.0 - x[i]) * (1.0 - x[i]);
+    }
+    return f;
+}
+
+template<std::size_t Order>
+void RosenbrockReverse(benchmark::State& state)
+{
+    run_reverse<Order>(state, std::vector<double>(static_cast<std::size_t>(state.range(0)), 0.5),
+                       [](const auto& x) { return rosenbrock(x); });
+}
+
+void BlackScholesFourVariablesReverse(benchmark::State& state)
+{
+    run_reverse<1>(state, {105.0, 0.25, 0.5, 0.01},
+                   [](const auto& x) { return black_scholes(x[0], x[1], x[2], x[3]); });
 }
 
 BENCHMARK(Horner)->DenseRange(1, 32)->Complexity();
 BENCHMARK(Transcendental)->DenseRange(1, 32)->Complexity();
 BENCHMARK(InverseFunctions)->DenseRange(1, 32)->Complexity();
 BENCHMARK(BlackScholes)->DenseRange(1, 32)->Complexity();
-BENCHMARK(MseGibbsEnergy)->DenseRange(1, 32)->Complexity();
+BENCHMARK(MseGibbsEnergy<>)->DenseRange(1, 32)->Complexity();
 BENCHMARK(TwoVariables)->DenseRange(1, 12);
 BENCHMARK(ThreeVariables)->DenseRange(1, 6);
 BENCHMARK(BlackScholesFourVariables)->DenseRange(1, 4);
+
+BENCHMARK(HornerReverse)->RangeMultiplier(2)->Range(8, 1024);
+BENCHMARK(TranscendentalReverse);
+BENCHMARK(InverseFunctionsReverse);
+BENCHMARK(TwoVariablesReverse);
+BENCHMARK(ThreeVariablesReverse);
+BENCHMARK(BlackScholesFourVariablesReverse);
+BENCHMARK(MseGibbsEnergy<1>)->RangeMultiplier(2)->Range(4, 128);
+BENCHMARK(MseGibbsEnergy<2>)->RangeMultiplier(2)->Range(4, 128);
+BENCHMARK(RosenbrockReverse<1>)->RangeMultiplier(2)->Range(8, 1024);
+BENCHMARK(RosenbrockReverse<2>)->RangeMultiplier(2)->Range(8, 128);
 
 BENCHMARK_MAIN();
