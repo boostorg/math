@@ -538,7 +538,7 @@ BOOST_MATH_GPU_ENABLED T ibeta_inv_imp(T a, T b, T p, T q, const Policy& pol, T*
    {
       if(b == 1)
       {
-         if(py) *py = 1 - p;
+         if(py) *py = q;
          return p;
       }
       // Change things around so we can handle as b == 1 special case below:
