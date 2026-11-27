@@ -425,6 +425,27 @@ void test_spots(RealType)
       BOOST_CHECK_CLOSE(fisher_f_distribution<RealType>::find_v1(boost::math::complement(x, df2, 1-P)), df1, tol2*200);
       BOOST_CHECK_CLOSE(fisher_f_distribution<RealType>::find_v2(boost::math::complement(x, df1, 1-P)), df2, tol2*10);
     }
+    // Both roots are below the initial guess of 1.
+    {
+      RealType df1 = RealType(0.1);
+      RealType df2 = 2;
+      RealType x = 15;
+      fisher_f_distribution<RealType> ref(df1, df2);
+      RealType P = cdf(ref, x);
+      RealType Q = cdf(complement(ref, x));
+      BOOST_CHECK_CLOSE(ref.find_v1(x, df2, P), df1, tol2*10);
+      BOOST_CHECK_CLOSE(ref.find_v1(boost::math::complement(x, df2, Q)), df1, tol2*10);
+    }
+    {
+      RealType df1 = 2;
+      RealType df2 = RealType(0.5);
+      RealType x = 15;
+      fisher_f_distribution<RealType> ref(df1, df2);
+      RealType P = cdf(ref, x);
+      RealType Q = cdf(complement(ref, x));
+      BOOST_CHECK_CLOSE(ref.find_v2(x, df1, P), df2, tol2*10);
+      BOOST_CHECK_CLOSE(ref.find_v2(boost::math::complement(x, df1, Q)), df2, tol2*10);
+    }
     // Test case where two df solve inversion problem
     RealType df1 = 5;
     RealType df2 = 3.5;
