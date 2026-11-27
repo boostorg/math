@@ -659,10 +659,12 @@ inline T digamma_by_double_word(const T& x, const T& cancellation)
    return evaluator(x, cancellation);
 }
 
-// Binary types up to double: the series above reach 64 bits, but a long double's fma is in software and far too slow.
+// Built-in binary types from float to double: a long double's fma is in software and far too slow, a narrower
+// type cannot hold the tables, and a class that only emulates one of these has not been verified here.
 template <class T>
 struct digamma_has_double_word : public BOOST_MATH_NAMESPACE::integral_constant<bool,
-   BOOST_MATH_NAMESPACE::numeric_limits<T>::is_specialized && (BOOST_MATH_NAMESPACE::numeric_limits<T>::radix == 2) && (BOOST_MATH_NAMESPACE::numeric_limits<T>::digits <= 53)> {};
+   BOOST_MATH_NAMESPACE::is_floating_point<T>::value && (BOOST_MATH_NAMESPACE::numeric_limits<T>::radix == 2)
+   && (BOOST_MATH_NAMESPACE::numeric_limits<T>::digits >= 24) && (BOOST_MATH_NAMESPACE::numeric_limits<T>::digits <= 53)> {};
 
 // Recomputes a result at x < 0 that is small beside largest, the largest of the terms that were added to give it.
 template <class T, class Tag>
