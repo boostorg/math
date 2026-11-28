@@ -313,8 +313,9 @@ BOOST_MATH_NAMESPACE_BEGIN namespace detail{
      // subscripting the tables in the calculation, but halves the storage space
      // (and complexity for that matter).
      //
+     // x and xc = 1 - x are not both exact: reduce the smaller, which is the one that was not rounded.
      T s = fabs(x) < fabs(xc) ? BOOST_MATH_NAMESPACE::sin_pi(x, pol) : BOOST_MATH_NAMESPACE::sin_pi(xc, pol);
-     T c = BOOST_MATH_NAMESPACE::cos_pi(x, pol);
+     T c = fabs(x) < fabs(xc) ? BOOST_MATH_NAMESPACE::cos_pi(x, pol) : T(-BOOST_MATH_NAMESPACE::cos_pi(xc, pol));
      switch(n)
      {
      case 1:
